@@ -2,14 +2,11 @@ using System;
 
 namespace Frends.Avro.Serialize.Exceptions;
 
-/// <summary>
-/// Exception thrown when file already exists in container.
-/// </summary>
+#pragma warning disable CS1591 // self explanatory
+
 public class FileAlreadyExistsException : Exception
 {
-    /// <summary>
-    /// Exceptions constructor
-    /// </summary>
     public FileAlreadyExistsException(string fileName)
-        : base($"{fileName} already exists in container") { }
+        : base($"{fileName} File already exists") { }
 }
+#pragma warning restore CS1591 // self explanatory
