@@ -10,9 +10,9 @@
 	<PackageTags>Frends</PackageTags>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
-	<Description>Frends Task to Convert CSV string content to a XML string.</Description>
+	<Description>Frends Task to serialize json string to avro file.</Description>
 	<PackageProjectUrl>https://frends.com/</PackageProjectUrl>
-	<RepositoryUrl>https://github.com/FrendsPlatform/Frends.CSV2</RepositoryUrl>
+	<RepositoryUrl>https://github.com/FrendsPlatform/Frends.Avro</RepositoryUrl>
   </PropertyGroup>
 	
   <ItemGroup>
