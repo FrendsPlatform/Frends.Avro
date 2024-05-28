@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using Frends.Avro.Serialize.Definitions;
 using Frends.Avro.Serialize.Exceptions;
@@ -38,6 +39,20 @@ public class Tests : TestsBase
         );
         Assert.That.FileExists(result.FilePath);
         Assert.That.FileIsNotEmpty(result.FilePath);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ThrowIfRequiredFieldIsMissing()
+    {
+        Avro.Serialize(
+            new Input
+            {
+                Json = JsonWithoutName,
+                Schema = Schema,
+                OutputPath = Path.Combine(testDirectory, "test.avro"),
+            }
+        );
     }
 
     [TestMethod]

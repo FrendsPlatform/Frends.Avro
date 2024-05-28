@@ -73,24 +73,11 @@ public class Avro
             }
             else
             {
-                if (fieldSchema is not PrimitiveSchema fieldType)
-                {
-                    throw new ArgumentException($"Field '{fieldName}' has an unsupported type.");
-                }
-
-                // Check if the field exists in the JToken
-                if (jToken[fieldName] != null)
-                {
-                    var csharpType = AvroTypeToCSharpType(fieldType.Tag);
-                    var fieldValue = jToken[fieldName].ToObject(csharpType);
-                    genericRecord.Add(fieldName, fieldValue);
-                }
-                else
-                {
-                    // Handle missing fields or set default values if necessary
-                    // For simplicity, we assume all fields are present in the JSON
+                if (jToken[fieldName] == null)
                     throw new ArgumentException($"Field '{fieldName}' is missing in the JSON.");
-                }
+                var csharpType = AvroTypeToCSharpType(fieldSchema.Tag);
+                var fieldValue = jToken[fieldName].ToObject(csharpType);
+                genericRecord.Add(fieldName, fieldValue);
             }
         }
         return genericRecord;
@@ -107,7 +94,7 @@ public class Avro
             Schema.Type.Double => typeof(double),
             Schema.Type.Bytes => typeof(byte[]),
             Schema.Type.String => typeof(string),
-            Schema.Type.Array => typeof(List<object>),
+            Schema.Type.Array => typeof(object[]),
             Schema.Type.Map => typeof(Dictionary<string, object>),
             Schema.Type.Record => typeof(GenericRecord),
             Schema.Type.Enumeration => typeof(string),
