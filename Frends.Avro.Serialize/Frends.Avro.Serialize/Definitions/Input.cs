@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Frends.Avro.Serialize.Definitions;
+﻿namespace Frends.Avro.Serialize.Definitions;
 
 /// <summary>
 /// Input parameters.
@@ -30,14 +28,8 @@ public class Input
     public string Schema { get; init; }
 
     /// <summary>
-    /// Path to the directory where you want to store result
+    /// Path to the file where you want to store result
     /// </summary>
-    /// <example>C:\results\</example>
-    public string OutputDir {get; init;}
-
-    /// <summary>
-    /// name of the result file
-    /// </summary>
-    /// <example>myfile.avro</example>
-    public string OutputFile { get; init; }
+    /// <example>C:\results\myfile.avro</example>
+    public string OutputPath { get; init; }
 }
