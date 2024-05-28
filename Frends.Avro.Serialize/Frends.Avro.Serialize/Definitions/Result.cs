@@ -6,13 +6,8 @@
 public class Result
 {
     /// <summary>
-    /// Operation complete without errors.
+    /// Path to the file with result
     /// </summary>
-    /// <example>true</example>
-    public byte[] Avro { get; private set; }
-
-    internal Result(byte[] avro)
-    {
-        Avro = avro;
-    }
+    /// <example>C:\results\myfile.avro</example>
+    public string FilePath { get; init; }
 }

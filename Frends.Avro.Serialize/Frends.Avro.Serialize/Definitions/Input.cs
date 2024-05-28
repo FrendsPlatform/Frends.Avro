@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Frends.Avro.Serialize.Definitions;
 
@@ -12,8 +11,7 @@ public class Input
     /// Input JSON string
     /// </summary>
     /// <example>{ "foo": "bar" }</example>
-    [DisplayFormat(DataFormatString = "Text")]
-    public string Json { get; set; }
+    public string Json { get; init; }
 
     /// <summary>
     /// Avro Schema to use
@@ -29,5 +27,17 @@ public class Input
     ///     ]
     /// }
     /// </example>
-    public string Schema { get; set; }
+    public string Schema { get; init; }
+
+    /// <summary>
+    /// Path to the directory where you want to store result
+    /// </summary>
+    /// <example>C:\results\</example>
+    public string OutputDir {get; init;}
+
+    /// <summary>
+    /// name of the result file
+    /// </summary>
+    /// <example>myfile.avro</example>
+    public string OutputFile { get; init; }
 }

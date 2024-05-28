@@ -1,9 +1,9 @@
 # Frends.Avro.Serialize
-Frends Task to Convert CSV string content to a XML string.
+Frends Task to serialize json string to avro file.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT) 
-[![Build](https://github.com/FrendsPlatform/Frends.CSV2/actions/workflows/ConvertToXML_build_and_test_on_main.yml/badge.svg)](https://github.com/FrendsPlatform/Frends.CSV2/actions)
-![Coverage](https://app-github-custom-badges.azurewebsites.net/Badge?key=FrendsPlatform/Frends.CSV2/Frends.Avro.Serialize|main)
+[![Build](https://github.com/FrendsPlatform/Frends.Avro/actions/workflows/Serialize_build_and_test_on_main.yml/badge.svg)](https://github.com/FrendsPlatform/Frends.Avro/actions)
+![Coverage](https://app-github-custom-badges.azurewebsites.net/Badge?key=FrendsPlatform/Frends.Avro/Frends.Avro.Serialize|main)
 
 # Installing
 
