@@ -10,7 +10,7 @@
 	<PackageTags>Frends</PackageTags>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
-	<Description>Frends Task to serialize json string to avro file.</Description>
+	<Description>Frends Task to serialize JSON string to Avro file.</Description>
 	<PackageProjectUrl>https://frends.com/</PackageProjectUrl>
 	<RepositoryUrl>https://github.com/FrendsPlatform/Frends.Avro</RepositoryUrl>
   </PropertyGroup>
