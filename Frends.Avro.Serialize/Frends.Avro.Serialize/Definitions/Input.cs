@@ -6,7 +6,7 @@
 public class Input
 {
     /// <summary>
-    /// Input JSON string that can be both signle objects and arrays of objects.
+    /// Input JSON string that can be both single objects and arrays of objects.
     /// </summary>
     /// <example>{ "foo": "bar" }</example>
     public string Json { get; init; }
