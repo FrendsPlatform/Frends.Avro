@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading;
 using Frends.Avro.Deserialize.Definitions;
 
 namespace Frends.Avro.Deserialize.Tests.tests;
@@ -11,7 +12,8 @@ public class Tests : TestsBase
     public void Deserialize()
     {
         var result = Avro.Deserialize(
-            new Input { AvroFilePath = Path.Combine(testFileParentPath, "test.avro") }
+            new Input { AvroFilePath = Path.Combine(testFileParentPath, "test.avro") },
+            CancellationToken.None
         );
 
         Assert.AreEqual(ExpectedResult.ToString(), result.Json.ToString());
@@ -25,7 +27,8 @@ public class Tests : TestsBase
             new Input
             {
                 AvroFilePath = Path.Combine(testFileParentPath, "ThisFileShoulNotExist.avro")
-            }
+            },
+            CancellationToken.None
         );
     }
 
@@ -34,7 +37,8 @@ public class Tests : TestsBase
     public void ThrowIfFileIsCorrupted()
     {
         Avro.Deserialize(
-            new Input { AvroFilePath = Path.Combine(testFileParentPath, "test-invalid.avro") }
+            new Input { AvroFilePath = Path.Combine(testFileParentPath, "test-invalid.avro") },
+            CancellationToken.None
         );
     }
 }
