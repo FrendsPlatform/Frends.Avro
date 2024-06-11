@@ -37,7 +37,8 @@ public class Avro
             }
 
             result.Add(obj);
-            if(CancellationToken.IsCancellationRequested){
+            if (CancellationToken.IsCancellationRequested)
+            {
                 break;
             }
         }
