@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Threading;
 using Avro;
 using Avro.File;
 using Avro.Generic;
@@ -14,12 +15,13 @@ namespace Frends.Avro.Deserialize;
 public class Avro
 {
     /// <summary>
-    /// Deserialize Avro file to Json string.
+    /// Deserialize Avro file to JSON string.
     /// [Documentation](https://tasks.frends.com/tasks/frends-tasks/Frends.Avro.Deserialize)
     /// </summary>
     /// <param name="input">Input parameters</param>
+    /// <param name="CancellationToken">CancellationToken from Frends</param>
     /// <returns>Object { string OutputPath }</returns>
-    public static Result Deserialize([PropertyTab] Input input)
+    public static Result Deserialize([PropertyTab] Input input, CancellationToken CancellationToken)
     {
         using var dataFileReader = DataFileReader<GenericRecord>.OpenReader(input.AvroFilePath);
         var result = new JArray();
@@ -35,6 +37,9 @@ public class Avro
             }
 
             result.Add(obj);
+            if(CancellationToken.IsCancellationRequested){
+                break;
+            }
         }
         return new Result { Json = result };
     }

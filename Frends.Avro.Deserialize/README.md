@@ -1,5 +1,5 @@
 # Frends.Avro.Serialize
-Frends Task to deserialize avro file to json string.
+Frends Task to deserialize Avro file to JSON string.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT) 
 [![Build](https://github.com/FrendsPlatform/Frends.Avro/actions/workflows/Deserialize_build_and_test_on_main.yml/badge.svg)](https://github.com/FrendsPlatform/Frends.Avro/actions)

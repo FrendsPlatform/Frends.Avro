@@ -6,7 +6,7 @@ namespace Frends.Avro.Deserialize.Definitions;
 public class Input
 {
     /// <summary>
-    /// Path to the avro file you want to deserialize
+    /// Path to the Avro file you want to deserialize
     /// </summary>
     /// <example>C:\results\myfile.avro</example>
     public string AvroFilePath { get; init; }

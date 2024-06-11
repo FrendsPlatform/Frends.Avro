@@ -11,5 +11,5 @@ public class Result
     /// JArray with deserialized data
     /// </summary>
     /// <example>[{"foo": "bar"}]</example>
-    public JArray Json { get; init; }
+    public dynamic Json { get; init; }
 }
