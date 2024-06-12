@@ -26,7 +26,7 @@ public class Tests : TestsBase
         Avro.Deserialize(
             new Input
             {
-                AvroFilePath = Path.Combine(testFileParentPath, "ThisFileShoulNotExist.avro")
+                AvroFilePath = Path.Combine(testFileParentPath, "ThisFileShouldNotExist.avro")
             },
             CancellationToken.None
         );
