@@ -20,7 +20,7 @@ public class Avro
     /// </summary>
     /// <param name="input">Input parameters</param>
     /// <param name="CancellationToken">CancellationToken from Frends</param>
-    /// <returns>Object { string OutputPath }</returns>
+    /// <returns>Object { dynamic Json }</returns>
     public static Result Deserialize([PropertyTab] Input input, CancellationToken CancellationToken)
     {
         using var dataFileReader = DataFileReader<GenericRecord>.OpenReader(input.AvroFilePath);
