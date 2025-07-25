@@ -46,7 +46,7 @@ public class Avro
                     break;
                 }
             }
-            return new Result { Json = result };
+            return new Result { Json = result, Success = true, Error = null };
         }
         catch (Exception ex)
         {
@@ -65,7 +65,7 @@ public class Avro
                 AdditionalInfo = ex.GetType().Name
             };
             
-            return new Result { Json = JToken.FromObject(new { Error = error }) };
+            return new Result { Json = JToken.FromObject(new { Error = error }), Success = false, Error = error };
         }
     }
 }

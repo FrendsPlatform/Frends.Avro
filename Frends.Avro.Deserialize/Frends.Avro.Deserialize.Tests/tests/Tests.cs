@@ -18,6 +18,8 @@ public class Tests : TestsBase
         );
 
         Assert.AreEqual(ExpectedResult.ToString(), result.Json.ToString());
+        Assert.IsTrue(result.Success);
+        Assert.IsNull(result.Error);
     }
 
     [TestMethod]
@@ -60,6 +62,9 @@ public class Tests : TestsBase
         Assert.IsNotNull(result.Json);
         Assert.IsTrue(result.Json.ToString().Contains("Error"));
         Assert.IsTrue(result.Json.ToString().Contains("Message"));
+        Assert.IsFalse(result.Success);
+        Assert.IsNotNull(result.Error);
+        Assert.AreEqual("FileNotFoundException", result.Error.AdditionalInfo);
     }
 
     [TestMethod]
@@ -78,5 +83,8 @@ public class Tests : TestsBase
         Assert.IsNotNull(result.Json);
         Assert.IsTrue(result.Json.ToString().Contains("Error"));
         Assert.IsTrue(result.Json.ToString().Contains(customMessage));
+        Assert.IsFalse(result.Success);
+        Assert.IsNotNull(result.Error);
+        Assert.AreEqual(customMessage, result.Error.Message);
     }
 }
