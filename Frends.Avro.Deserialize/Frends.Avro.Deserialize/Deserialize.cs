@@ -5,6 +5,7 @@ using Avro;
 using Avro.File;
 using Avro.Generic;
 using Frends.Avro.Deserialize.Definitions;
+using Frends.Avro.Deserialize.Helpers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
