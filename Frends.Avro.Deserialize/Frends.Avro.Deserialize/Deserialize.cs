@@ -23,7 +23,7 @@ public class Avro
     /// <returns>Object { dynamic Json }</returns>
     public static Result Deserialize([PropertyTab] Input input, CancellationToken CancellationToken)
     {
-        using var dataFileReader = DataFileReader<GenericRecord>.OpenReader(input.AvroFilePath);
+        using var dataFileReader = DataFileReader<GenericRecord>.OpenReader(input.FilePath);
         var result = new JArray();
 
         foreach (var record in dataFileReader.NextEntries)

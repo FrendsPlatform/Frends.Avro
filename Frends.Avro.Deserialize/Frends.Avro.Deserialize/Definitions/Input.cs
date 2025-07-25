@@ -9,5 +9,5 @@ public class Input
     /// Path to the Avro file you want to deserialize
     /// </summary>
     /// <example>C:\results\myfile.avro</example>
-    public string AvroFilePath { get; init; }
+    public string FilePath { get; init; }
 }

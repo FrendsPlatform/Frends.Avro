@@ -12,7 +12,7 @@ public class Tests : TestsBase
     public void Deserialize()
     {
         var result = Avro.Deserialize(
-            new Input { AvroFilePath = Path.Combine(testFileParentPath, "test.avro") },
+            new Input { FilePath = Path.Combine(testFileParentPath, "test.avro") },
             CancellationToken.None
         );
 
@@ -26,7 +26,7 @@ public class Tests : TestsBase
         Avro.Deserialize(
             new Input
             {
-                AvroFilePath = Path.Combine(testFileParentPath, "ThisFileShouldNotExist.avro")
+                FilePath = Path.Combine(testFileParentPath, "ThisFileShouldNotExist.avro")
             },
             CancellationToken.None
         );
@@ -37,7 +37,7 @@ public class Tests : TestsBase
     public void ThrowIfFileIsCorrupted()
     {
         Avro.Deserialize(
-            new Input { AvroFilePath = Path.Combine(testFileParentPath, "test-invalid.avro") },
+            new Input { FilePath = Path.Combine(testFileParentPath, "test-invalid.avro") },
             CancellationToken.None
         );
     }
