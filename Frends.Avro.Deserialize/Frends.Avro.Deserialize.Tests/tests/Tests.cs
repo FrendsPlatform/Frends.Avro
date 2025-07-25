@@ -13,6 +13,7 @@ public class Tests : TestsBase
     {
         var result = Avro.Deserialize(
             new Input { FilePath = Path.Combine(testFileParentPath, "test.avro") },
+            new Options(),
             CancellationToken.None
         );
 
@@ -28,6 +29,7 @@ public class Tests : TestsBase
             {
                 FilePath = Path.Combine(testFileParentPath, "ThisFileShouldNotExist.avro")
             },
+            new Options(),
             CancellationToken.None
         );
     }
@@ -38,7 +40,41 @@ public class Tests : TestsBase
     {
         Avro.Deserialize(
             new Input { FilePath = Path.Combine(testFileParentPath, "test-invalid.avro") },
+            new Options(),
             CancellationToken.None
         );
+    }
+
+    [TestMethod]
+    public void DoNotThrowIfFileDoesNotExistsAndThrowErrorOnFailureIsFalse()
+    {
+        var result = Avro.Deserialize(
+            new Input
+            {
+                FilePath = Path.Combine(testFileParentPath, "ThisFileShouldNotExist.avro")
+            },
+            new Options { ThrowErrorOnFailure = false },
+            CancellationToken.None
+        );
+
+        Assert.IsNotNull(result.Json);
+        Assert.IsTrue(result.Json.ToString().Contains("Error"));
+    }
+
+    [TestMethod]
+    public void UseCustomErrorMessageWhenProvided()
+    {
+        var customMessage = "Custom error occurred";
+        var result = Avro.Deserialize(
+            new Input
+            {
+                FilePath = Path.Combine(testFileParentPath, "ThisFileShouldNotExist.avro")
+            },
+            new Options { ThrowErrorOnFailure = false, ErrorMessageOnFailure = customMessage },
+            CancellationToken.None
+        );
+
+        Assert.IsNotNull(result.Json);
+        Assert.IsTrue(result.Json.ToString().Contains(customMessage));
     }
 }

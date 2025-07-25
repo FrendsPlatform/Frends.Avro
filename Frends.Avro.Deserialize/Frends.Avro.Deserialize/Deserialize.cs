@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Threading;
 using Avro;
 using Avro.File;
@@ -19,29 +20,46 @@ public class Avro
     /// [Documentation](https://tasks.frends.com/tasks/frends-tasks/Frends.Avro.Deserialize)
     /// </summary>
     /// <param name="input">Input parameters</param>
+    /// <param name="options">Options for deserialization</param>
     /// <param name="CancellationToken">CancellationToken from Frends</param>
     /// <returns>Object { dynamic Json }</returns>
-    public static Result Deserialize([PropertyTab] Input input, CancellationToken CancellationToken)
+    public static Result Deserialize([PropertyTab] Input input, [PropertyTab] Options options, CancellationToken CancellationToken)
     {
-        using var dataFileReader = DataFileReader<GenericRecord>.OpenReader(input.FilePath);
-        var result = new JArray();
-
-        foreach (var record in dataFileReader.NextEntries)
+        try
         {
-            var obj = new JObject();
-            foreach (var field in record.Schema.Fields)
-            {
-                var value = record.GetValue(field.Pos);
-                var token = value is null ? null : JToken.FromObject(value);
-                obj.Add(field.Name, token);
-            }
+            using var dataFileReader = DataFileReader<GenericRecord>.OpenReader(input.FilePath);
+            var result = new JArray();
 
-            result.Add(obj);
-            if (CancellationToken.IsCancellationRequested)
+            foreach (var record in dataFileReader.NextEntries)
             {
-                break;
+                var obj = new JObject();
+                foreach (var field in record.Schema.Fields)
+                {
+                    var value = record.GetValue(field.Pos);
+                    var token = value is null ? null : JToken.FromObject(value);
+                    obj.Add(field.Name, token);
+                }
+
+                result.Add(obj);
+                if (CancellationToken.IsCancellationRequested)
+                {
+                    break;
+                }
             }
+            return new Result { Json = result };
         }
-        return new Result { Json = result };
+        catch (Exception ex)
+        {
+            if (options.ThrowErrorOnFailure)
+            {
+                throw;
+            }
+            
+            var errorMessage = string.IsNullOrEmpty(options.ErrorMessageOnFailure) 
+                ? ex.Message 
+                : options.ErrorMessageOnFailure;
+            
+            return new Result { Json = JToken.FromObject(new { Error = errorMessage }) };
+        }
     }
 }
