@@ -5,16 +5,22 @@ using Newtonsoft.Json.Linq;
 namespace Frends.Avro.Deserialize.Helpers;
 
 /// <summary>
-/// Static helper class for handling errors in Avro deserialization operations.
+/// Provides centralized error handling functionality for Avro deserialization operations.
 /// </summary>
 public static class ErrorHandler
 {
     /// <summary>
-    /// Handles exceptions based on the provided options.
+    /// Handles exceptions that occur during Avro deserialization based on the configured options.
+    /// Either throws the exception or returns a Result object with error information.
     /// </summary>
-    /// <param name="ex">The exception that occurred</param>
-    /// <param name="options">Options that determine error handling behavior</param>
-    /// <returns>Result object with error information if not throwing, otherwise throws the exception</returns>
+    /// <param name="ex">The exception that occurred during deserialization.</param>
+    /// <param name="options">Configuration options that determine how errors should be handled.</param>
+    /// <returns>A Result object containing error information when ThrowErrorOnFailure is false.</returns>
+    /// <exception cref="Exception">Thrown when ThrowErrorOnFailure is true, either the original exception or a wrapped exception with custom message.</exception>
+    /// <remarks>
+    /// When ThrowErrorOnFailure is true, this method will throw either the original exception or wrap it with a custom message if provided.
+    /// When ThrowErrorOnFailure is false, this method returns a Result object with Success=false and populated Error information.
+    /// </remarks>
     public static Result Handle(Exception ex, Options options)
     {
         if (options.ThrowErrorOnFailure)

@@ -12,18 +12,26 @@ using Newtonsoft.Json.Linq;
 namespace Frends.Avro.Deserialize;
 
 /// <summary>
-/// Avro task.
+/// Provides functionality for deserializing Avro files to JSON format.
 /// </summary>
 public class Avro
 {
     /// <summary>
-    /// Deserialize Avro file to JSON string.
+    /// Deserializes an Avro file to JSON format.
+    /// Reads all records from the specified Avro file and converts them to a JSON array.
+    /// Each record in the Avro file becomes a JSON object in the resulting array.
     /// [Documentation](https://tasks.frends.com/tasks/frends-tasks/Frends.Avro.Deserialize)
     /// </summary>
-    /// <param name="input">Input parameters</param>
-    /// <param name="options">Options for deserialization</param>
-    /// <param name="CancellationToken">CancellationToken from Frends</param>
-    /// <returns>Object { dynamic Json }</returns>
+    /// <param name="input">Input parameters containing the file path to the Avro file.</param>
+    /// <param name="options">Configuration options for the deserialization operation.</param>
+    /// <param name="CancellationToken">Cancellation token from Frends platform for operation cancellation.</param>
+    /// <returns>A Result object containing the deserialized JSON data, success status, and error information if applicable.</returns>
+    /// <exception cref="Exception">Thrown when ThrowErrorOnFailure is true and deserialization fails.</exception>
+    /// <example>
+    /// var input = new Input { FilePath = @"C:\data\sample.avro" };
+    /// var options = new Options { ThrowErrorOnFailure = true };
+    /// var result = Avro.Deserialize(input, options, CancellationToken.None);
+    /// </example>
     public static Result Deserialize([PropertyTab] Input input, [PropertyTab] Options options, CancellationToken CancellationToken)
     {
         try
