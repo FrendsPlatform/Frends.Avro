@@ -50,22 +50,7 @@ public class Avro
         }
         catch (Exception ex)
         {
-            if (options.ThrowErrorOnFailure)
-            {
-                throw;
-            }
-            
-            var errorMessage = string.IsNullOrEmpty(options.ErrorMessageOnFailure) 
-                ? ex.Message 
-                : options.ErrorMessageOnFailure;
-            
-            var error = new Error 
-            { 
-                Message = errorMessage,
-                AdditionalInfo = ex.GetType().Name
-            };
-            
-            return new Result { Json = JToken.FromObject(new { Error = error }), Success = false, Error = error };
+            return ErrorHandler.Handle(ex, options);
         }
     }
 }
