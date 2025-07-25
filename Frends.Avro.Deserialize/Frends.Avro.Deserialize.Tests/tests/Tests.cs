@@ -23,28 +23,32 @@ public class Tests : TestsBase
     }
 
     [TestMethod]
-    [ExpectedException(typeof(FileNotFoundException))]
     public void ThrowIfFileDoesNotExists()
     {
-        Avro.Deserialize(
-            new Input
-            {
-                FilePath = Path.Combine(testFileParentPath, "ThisFileShouldNotExist.avro")
-            },
-            new Options(),
-            CancellationToken.None
-        );
+        Assert.ThrowsException<FileNotFoundException>(() =>
+        {
+            Avro.Deserialize(
+                new Input
+                {
+                    FilePath = Path.Combine(testFileParentPath, "ThisFileShouldNotExist.avro")
+                },
+                new Options(),
+                CancellationToken.None
+            );
+        });
     }
 
     [TestMethod]
-    [ExpectedException(typeof(OverflowException))]
     public void ThrowIfFileIsCorrupted()
     {
-        Avro.Deserialize(
-            new Input { FilePath = Path.Combine(testFileParentPath, "test-invalid.avro") },
-            new Options(),
-            CancellationToken.None
-        );
+        Assert.ThrowsException<OverflowException>(() =>
+        {
+            Avro.Deserialize(
+                new Input { FilePath = Path.Combine(testFileParentPath, "test-invalid.avro") },
+                new Options(),
+                CancellationToken.None
+            );
+        });
     }
 
     [TestMethod]
