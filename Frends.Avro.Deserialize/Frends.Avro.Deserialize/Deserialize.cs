@@ -59,7 +59,13 @@ public class Avro
                 ? ex.Message 
                 : options.ErrorMessageOnFailure;
             
-            return new Result { Json = JToken.FromObject(new { Error = errorMessage }) };
+            var error = new Error 
+            { 
+                Message = errorMessage,
+                AdditionalInfo = ex.GetType().Name
+            };
+            
+            return new Result { Json = JToken.FromObject(new { Error = error }) };
         }
     }
 }

@@ -59,6 +59,7 @@ public class Tests : TestsBase
 
         Assert.IsNotNull(result.Json);
         Assert.IsTrue(result.Json.ToString().Contains("Error"));
+        Assert.IsTrue(result.Json.ToString().Contains("Message"));
     }
 
     [TestMethod]
@@ -75,6 +76,7 @@ public class Tests : TestsBase
         );
 
         Assert.IsNotNull(result.Json);
+        Assert.IsTrue(result.Json.ToString().Contains("Error"));
         Assert.IsTrue(result.Json.ToString().Contains(customMessage));
     }
 }
