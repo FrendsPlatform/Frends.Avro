@@ -23,7 +23,7 @@ public static class ErrorHandler
             {
                 throw new Exception(options.ErrorMessageOnFailure, ex);
             }
-            throw;
+            throw ex;
         }
         
         var errorMessage = string.IsNullOrEmpty(options.ErrorMessageOnFailure) 
