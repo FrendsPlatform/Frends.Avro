@@ -1,0 +1,28 @@
+﻿[
+    {
+        "Task": "Frends.Avro.Deserialize",
+        "Migrations": [
+            {
+                "Version": "2.0.0",
+                "Description": "Major refactoring: renamed parameter, added Options tab with error handling, updated Result structure",
+                "Migration": [
+                    {
+                        "Type": "Copy",
+                        "Source": "Input.AvroFilePath",
+                        "Target": "Input.FilePath"
+                    },
+                    {
+                        "Type": "Set",
+                        "Target": "Options.ThrowErrorOnFailure",
+                        "Value": "true"
+                    },
+                    {
+                        "Type": "Set",
+                        "Target": "Options.ErrorMessageOnFailure",
+                        "Value": "\"\""
+                    }
+                ]
+            }
+        ]
+    }
+]

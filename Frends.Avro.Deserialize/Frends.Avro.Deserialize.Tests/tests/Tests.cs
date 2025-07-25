@@ -131,7 +131,7 @@ public class Tests : TestsBase
     public void DefaultOptionsThrowErrorOnFailureIsTrue()
     {
         var options = new Options();
-        
+
         // Verify default behavior throws exception
         Assert.ThrowsException<FileNotFoundException>(() =>
         {

@@ -31,17 +31,17 @@ public static class ErrorHandler
             }
             throw ex;
         }
-        
-        var errorMessage = string.IsNullOrEmpty(options.ErrorMessageOnFailure) 
-            ? ex.Message 
+
+        var errorMessage = string.IsNullOrEmpty(options.ErrorMessageOnFailure)
+            ? ex.Message
             : options.ErrorMessageOnFailure;
-        
-        var error = new Error 
-        { 
+
+        var error = new Error
+        {
             Message = errorMessage,
             AdditionalInfo = ex.GetType().Name
         };
-        
+
         return new Result { Json = JToken.FromObject(new { Error = error }), Success = false, Error = error };
     }
 }
