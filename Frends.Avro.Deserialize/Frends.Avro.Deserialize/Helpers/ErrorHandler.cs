@@ -39,7 +39,7 @@ public static class ErrorHandler
         var error = new Error
         {
             Message = errorMessage,
-            AdditionalInfo = ex
+            AdditionalInfo = ex.GetType().Name
         };
 
         return new Result { Success = false, Error = error };

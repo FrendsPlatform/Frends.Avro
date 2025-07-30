@@ -133,4 +133,47 @@ public class Tests : TestsBase
         Assert.IsTrue(result.Success);
         Assert.IsNull(result.Error);
     }
+
+    [TestMethod]
+    public void DoNotThrowIfFileIsCorruptedAndThrowErrorOnFailureIsFalse()
+    {
+        var result = Avro.Deserialize(
+            new Input { FilePath = Path.Combine(testFileParentPath, "test-invalid.avro") },
+            new Options { ThrowErrorOnFailure = false },
+            CancellationToken.None
+        );
+
+        Assert.IsFalse(result.Success);
+        Assert.IsNotNull(result.Error);
+        Assert.AreEqual("Arithmetic operation resulted in an overflow.", result.Error.Message);
+    }
+
+    [TestMethod]
+    public void UseCustomErrorMessageForCorruptedFile()
+    {
+        var customMessage = "File is corrupted and cannot be processed";
+        var result = Avro.Deserialize(
+            new Input { FilePath = Path.Combine(testFileParentPath, "test-invalid.avro") },
+            new Options { ThrowErrorOnFailure = false, ErrorMessageOnFailure = customMessage },
+            CancellationToken.None
+        );
+
+        Assert.IsFalse(result.Success);
+        Assert.IsNotNull(result.Error);
+        StringAssert.Contains(result.Error.Message, customMessage);
+    }
+
+    [TestMethod]
+    public void EmptyFilePathWithThrowErrorOnFailureFalse()
+    {
+        var result = Avro.Deserialize(
+            new Input { FilePath = "" },
+            new Options { ThrowErrorOnFailure = false },
+            CancellationToken.None
+        );
+
+        Assert.IsFalse(result.Success);
+        Assert.IsNotNull(result.Error);
+        Assert.AreEqual("ArgumentException", result.Error.AdditionalInfo);
+    }
 }
