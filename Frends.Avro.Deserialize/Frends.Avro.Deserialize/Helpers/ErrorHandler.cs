@@ -34,14 +34,14 @@ public static class ErrorHandler
 
         var errorMessage = string.IsNullOrEmpty(options.ErrorMessageOnFailure)
             ? ex.Message
-            : options.ErrorMessageOnFailure;
+            : $"{options.ErrorMessageOnFailure}: {ex.Message}";
 
         var error = new Error
         {
             Message = errorMessage,
-            AdditionalInfo = ex.GetType().Name
+            AdditionalInfo = ex
         };
 
-        return new Result { Json = JToken.FromObject(new { Error = error }), Success = false, Error = error };
+        return new Result { Success = false, Error = error };
     }
 }

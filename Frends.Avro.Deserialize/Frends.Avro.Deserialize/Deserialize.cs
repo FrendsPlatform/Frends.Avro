@@ -26,12 +26,6 @@ public class Avro
     /// <param name="options">Configuration options for the deserialization operation.</param>
     /// <param name="CancellationToken">Cancellation token from Frends platform for operation cancellation.</param>
     /// <returns>A Result object containing the deserialized JSON data, success status, and error information if applicable.</returns>
-    /// <exception cref="Exception">Thrown when ThrowErrorOnFailure is true and deserialization fails.</exception>
-    /// <example>
-    /// var input = new Input { FilePath = @"C:\data\sample.avro" };
-    /// var options = new Options { ThrowErrorOnFailure = true };
-    /// var result = Avro.Deserialize(input, options, CancellationToken.None);
-    /// </example>
     public static Result Deserialize([PropertyTab] Input input, [PropertyTab] Options options, CancellationToken CancellationToken)
     {
         try
