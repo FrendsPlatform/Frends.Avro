@@ -41,10 +41,14 @@ public class Tests : TestsBase
     [TestMethod]
     public void ThrowIfFileIsCorrupted()
     {
+        var sourcePath = Path.Combine(testFileParentPath, "test-invalid.avro");
+        var tempFile = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".avro");
+        File.Copy(sourcePath, tempFile, overwrite: true);
+
         Assert.ThrowsException<OverflowException>(() =>
         {
             Avro.Deserialize(
-                new Input { FilePath = Path.Combine(testFileParentPath, "test-invalid.avro") },
+                new Input { FilePath = tempFile },
                 new Options(),
                 CancellationToken.None
             );
