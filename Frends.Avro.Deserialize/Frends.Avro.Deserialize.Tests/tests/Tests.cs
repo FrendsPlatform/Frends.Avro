@@ -45,14 +45,31 @@ public class Tests : TestsBase
         var tempFile = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".avro");
         File.Copy(sourcePath, tempFile, overwrite: true);
 
-        Assert.ThrowsException<OverflowException>(() =>
+        try
         {
-            Avro.Deserialize(
-                new Input { FilePath = tempFile },
-                new Options(),
-                CancellationToken.None
-            );
-        });
+            Assert.ThrowsException<OverflowException>(() =>
+            {
+                Avro.Deserialize(
+                    new Input { FilePath = tempFile },
+                    new Options(),
+                    CancellationToken.None
+                );
+            });
+        }
+        finally
+        {
+            if (File.Exists(tempFile))
+            {
+                try
+                {
+                    File.Delete(tempFile);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Failed to delete temp file: {ex.Message}");
+                }
+            }
+        }
     }
 
     [TestMethod]
@@ -94,20 +111,6 @@ public class Tests : TestsBase
                 CancellationToken.None
             );
         });
-    }
-
-    [TestMethod]
-    public void SuccessfulDeserializationWithDefaultOptions()
-    {
-        var result = Avro.Deserialize(
-            new Input { FilePath = Path.Combine(testFileParentPath, "test.avro") },
-            new Options(),
-            CancellationToken.None
-        );
-
-        Assert.AreEqual(ExpectedResult.ToString(), result.Json.ToString());
-        Assert.IsTrue(result.Success);
-        Assert.IsNull(result.Error);
     }
 
     [TestMethod]

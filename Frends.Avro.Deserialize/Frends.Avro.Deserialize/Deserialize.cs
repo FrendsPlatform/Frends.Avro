@@ -1,12 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Threading;
-using Avro;
 using Avro.File;
 using Avro.Generic;
 using Frends.Avro.Deserialize.Definitions;
 using Frends.Avro.Deserialize.Helpers;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Frends.Avro.Deserialize;
@@ -24,9 +22,9 @@ public class Avro
     /// </summary>
     /// <param name="input">Input parameters containing the file path to the Avro file.</param>
     /// <param name="options">Configuration options for the deserialization operation.</param>
-    /// <param name="CancellationToken">Cancellation token from Frends platform for operation cancellation.</param>
+    /// <param name="cancellationToken">Cancellation token from Frends platform for operation cancellation.</param>
     /// <returns>A Result object containing the deserialized JSON data, success status, and error information if applicable.</returns>
-    public static Result Deserialize([PropertyTab] Input input, [PropertyTab] Options options, CancellationToken CancellationToken)
+    public static Result Deserialize([PropertyTab] Input input, [PropertyTab] Options options, CancellationToken cancellationToken)
     {
         try
         {
@@ -44,7 +42,7 @@ public class Avro
                 }
 
                 result.Add(obj);
-                if (CancellationToken.IsCancellationRequested)
+                if (cancellationToken.IsCancellationRequested)
                 {
                     break;
                 }

@@ -1,6 +1,5 @@
 using System;
 using Frends.Avro.Deserialize.Definitions;
-using Newtonsoft.Json.Linq;
 
 namespace Frends.Avro.Deserialize.Helpers;
 

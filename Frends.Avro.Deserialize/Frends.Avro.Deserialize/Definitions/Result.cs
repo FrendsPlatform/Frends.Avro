@@ -1,5 +1,3 @@
-using Newtonsoft.Json.Linq;
-
 namespace Frends.Avro.Deserialize.Definitions;
 
 /// <summary>
