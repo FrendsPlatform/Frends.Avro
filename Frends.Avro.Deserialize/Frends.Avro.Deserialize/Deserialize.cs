@@ -1,47 +1,57 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Threading;
-using Avro;
 using Avro.File;
 using Avro.Generic;
 using Frends.Avro.Deserialize.Definitions;
-using Newtonsoft.Json;
+using Frends.Avro.Deserialize.Helpers;
 using Newtonsoft.Json.Linq;
 
 namespace Frends.Avro.Deserialize;
 
 /// <summary>
-/// Avro task.
+/// Provides functionality for deserializing Avro files to JSON format.
 /// </summary>
 public class Avro
 {
     /// <summary>
-    /// Deserialize Avro file to JSON string.
+    /// Deserializes an Avro file to JSON format.
+    /// Reads all records from the specified Avro file and converts them to a JSON array.
+    /// Each record in the Avro file becomes a JSON object in the resulting array.
     /// [Documentation](https://tasks.frends.com/tasks/frends-tasks/Frends.Avro.Deserialize)
     /// </summary>
-    /// <param name="input">Input parameters</param>
-    /// <param name="CancellationToken">CancellationToken from Frends</param>
-    /// <returns>Object { dynamic Json }</returns>
-    public static Result Deserialize([PropertyTab] Input input, CancellationToken CancellationToken)
+    /// <param name="input">Input parameters containing the file path to the Avro file.</param>
+    /// <param name="options">Configuration options for the deserialization operation.</param>
+    /// <param name="cancellationToken">Cancellation token from Frends platform for operation cancellation.</param>
+    /// <returns>A Result object containing the deserialized JSON data, success status, and error information if applicable.</returns>
+    public static Result Deserialize([PropertyTab] Input input, [PropertyTab] Options options, CancellationToken cancellationToken)
     {
-        using var dataFileReader = DataFileReader<GenericRecord>.OpenReader(input.AvroFilePath);
-        var result = new JArray();
-
-        foreach (var record in dataFileReader.NextEntries)
+        try
         {
-            var obj = new JObject();
-            foreach (var field in record.Schema.Fields)
-            {
-                var value = record.GetValue(field.Pos);
-                var token = value is null ? null : JToken.FromObject(value);
-                obj.Add(field.Name, token);
-            }
+            using var dataFileReader = DataFileReader<GenericRecord>.OpenReader(input.FilePath);
+            var result = new JArray();
 
-            result.Add(obj);
-            if (CancellationToken.IsCancellationRequested)
+            foreach (var record in dataFileReader.NextEntries)
             {
-                break;
+                var obj = new JObject();
+                foreach (var field in record.Schema.Fields)
+                {
+                    var value = record.GetValue(field.Pos);
+                    var token = value is null ? null : JToken.FromObject(value);
+                    obj.Add(field.Name, token);
+                }
+
+                result.Add(obj);
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    break;
+                }
             }
+            return new Result { Json = result, Success = true, Error = null };
         }
-        return new Result { Json = result };
+        catch (Exception ex)
+        {
+            return ErrorHandler.Handle(ex, options);
+        }
     }
 }
