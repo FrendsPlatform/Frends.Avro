@@ -12,8 +12,7 @@ public class Result
     public string FilePath { get; init; }
 
     /// <summary>
-    /// Error message when task fails and ThrowErrorOnFailure is false
+    /// Error information when task fails and ThrowErrorOnFailure is false
     /// </summary>
-    /// <example>Invalid JSON format</example>
-    public string ErrorMessage { get; init; } = "";
+    public Error? Error { get; init; }
 }

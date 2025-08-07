@@ -47,7 +47,15 @@ public class Avro
                 ? ex.Message 
                 : options.ErrorMessageOnFailure;
             
-            return new Result { FilePath = "", ErrorMessage = errorMessage };
+            return new Result 
+            { 
+                FilePath = "", 
+                Error = new Error 
+                { 
+                    Message = errorMessage,
+                    AdditionalInfo = new { ExceptionType = ex.GetType().Name, StackTrace = ex.StackTrace }
+                }
+            };
         }
     }
 

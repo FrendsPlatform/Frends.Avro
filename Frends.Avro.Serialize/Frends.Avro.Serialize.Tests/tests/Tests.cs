@@ -133,7 +133,8 @@ public class Tests : TestsBase
         );
         
         Assert.AreEqual("", result.FilePath);
-        Assert.IsTrue(!string.IsNullOrEmpty(result.ErrorMessage));
+        Assert.IsNotNull(result.Error);
+        Assert.IsTrue(!string.IsNullOrEmpty(result.Error.Message));
     }
 
     [TestMethod]
@@ -155,6 +156,8 @@ public class Tests : TestsBase
         );
         
         Assert.AreEqual("", result.FilePath);
-        Assert.AreEqual(customErrorMessage, result.ErrorMessage);
+        Assert.IsNotNull(result.Error);
+        Assert.AreEqual(customErrorMessage, result.Error.Message);
+        Assert.IsNotNull(result.Error.AdditionalInfo);
     }
 }
