@@ -21,9 +21,9 @@ public class Avro
     /// Serialize JSON into Avro.
     /// [Documentation](https://tasks.frends.com/tasks/frends-tasks/Frends.Avro.Serialize)
     /// </summary>
-    /// <param name="input">Input parameters</param>
-    /// <param name="options">Options parameters</param>
-    /// <returns>Object { string OutputPath }</returns>
+    /// <param name="input">Input parameters containing JSON data, Avro schema, and target file path</param>
+    /// <param name="options">Options parameters for error handling configuration</param>
+    /// <returns>Object { bool Success, string FilePath, Error Error }</returns>
     public static Result Serialize([PropertyTab] Input input, [PropertyTab] Options options)
     {
         try

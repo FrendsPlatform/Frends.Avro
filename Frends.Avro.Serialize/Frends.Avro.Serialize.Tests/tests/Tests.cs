@@ -24,7 +24,6 @@ public class Tests : TestsBase
             new Options()
         );
         Assert.IsTrue(result.Success);
-        Assert.IsTrue(result.Success);
         Assert.That.FileExists(result.FilePath);
         Assert.That.FileIsNotEmpty(result.FilePath);
     }
@@ -41,6 +40,7 @@ public class Tests : TestsBase
             },
             new Options()
         );
+        Assert.IsTrue(result.Success);
         Assert.That.FileExists(result.FilePath);
         Assert.That.FileIsNotEmpty(result.FilePath);
     }
