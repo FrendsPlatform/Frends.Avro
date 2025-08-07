@@ -40,23 +40,7 @@ public class Avro
         }
         catch (Exception ex)
         {
-            if (options.ThrowErrorOnFailure)
-                throw;
-            
-            var errorMessage = string.IsNullOrEmpty(options.ErrorMessageOnFailure) 
-                ? ex.Message 
-                : options.ErrorMessageOnFailure;
-            
-            return new Result 
-            { 
-                Success = false,
-                FilePath = "", 
-                Error = new Error 
-                { 
-                    Message = errorMessage,
-                    AdditionalInfo = new { ExceptionType = ex.GetType().Name, StackTrace = ex.StackTrace }
-                }
-            };
+            return ErrorHandler.Handle(ex, options);
         }
     }
 
