@@ -16,6 +16,6 @@ public class Options
     /// <summary>
     /// Custom error message to return when ThrowErrorOnFailure is false.
     /// </summary>
-    [DefaultValue("")]
-    public string ErrorMessageOnFailure { get; set; } = "";
+    [DefaultValue(null)]
+    public string? ErrorMessageOnFailure { get; set; }
 }
