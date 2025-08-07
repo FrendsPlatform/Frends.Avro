@@ -1,3 +1,5 @@
+#nullable enable
+
 namespace Frends.Avro.Serialize.Definitions;
 
 /// <summary>
@@ -14,4 +16,9 @@ public class Error
     /// Exception details if available
     /// </summary>
     public string? Exception { get; init; }
+
+    /// <summary>
+    /// Additional error information
+    /// </summary>
+    public object? AdditionalInfo { get; init; }
 }

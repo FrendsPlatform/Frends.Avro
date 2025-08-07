@@ -1,4 +1,6 @@
-﻿namespace Frends.Avro.Serialize.Definitions;
+#nullable enable
+
+namespace Frends.Avro.Serialize.Definitions;
 
 /// <summary>
 /// Task's result.
@@ -9,7 +11,7 @@ public class Result
     /// Path to the file with result
     /// </summary>
     /// <example>C:\results\myfile.avro</example>
-    public string FilePath { get; init; }
+    public string FilePath { get; init; } = string.Empty;
 
     /// <summary>
     /// Error information when task fails and ThrowErrorOnFailure is false
