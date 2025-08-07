@@ -8,6 +8,12 @@ namespace Frends.Avro.Serialize.Definitions;
 public class Result
 {
     /// <summary>
+    /// Indicates whether the serialization operation was successful
+    /// </summary>
+    /// <example>true</example>
+    public bool Success { get; init; }
+
+    /// <summary>
     /// Path to the file with result
     /// </summary>
     /// <example>C:\results\myfile.avro</example>

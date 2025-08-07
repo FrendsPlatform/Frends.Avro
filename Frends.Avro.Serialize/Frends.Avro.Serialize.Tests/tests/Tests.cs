@@ -23,6 +23,8 @@ public class Tests : TestsBase
             },
             new Options()
         );
+        Assert.IsTrue(result.Success);
+        Assert.IsTrue(result.Success);
         Assert.That.FileExists(result.FilePath);
         Assert.That.FileIsNotEmpty(result.FilePath);
     }
@@ -132,6 +134,7 @@ public class Tests : TestsBase
             new Options { ThrowErrorOnFailure = false }
         );
         
+        Assert.IsFalse(result.Success);
         Assert.AreEqual("", result.FilePath);
         Assert.IsNotNull(result.Error);
         Assert.IsTrue(!string.IsNullOrEmpty(result.Error.Message));
@@ -155,6 +158,7 @@ public class Tests : TestsBase
             }
         );
         
+        Assert.IsFalse(result.Success);
         Assert.AreEqual("", result.FilePath);
         Assert.IsNotNull(result.Error);
         Assert.AreEqual(customErrorMessage, result.Error.Message);

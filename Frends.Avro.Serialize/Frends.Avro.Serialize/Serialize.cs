@@ -36,7 +36,7 @@ public class Avro
 
             WriteAvroFile(input.TargetFilePath, avroSchema, jToken);
 
-            return new Result { FilePath = input.TargetFilePath };
+            return new Result { Success = true, FilePath = input.TargetFilePath };
         }
         catch (Exception ex)
         {
@@ -49,6 +49,7 @@ public class Avro
             
             return new Result 
             { 
+                Success = false,
                 FilePath = "", 
                 Error = new Error 
                 { 
