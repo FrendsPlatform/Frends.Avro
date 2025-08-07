@@ -3,24 +3,28 @@
 namespace Frends.Avro.Serialize.Definitions;
 
 /// <summary>
-/// Task's result.
+/// Result of the Avro serialization operation containing success status, file path, and error information.
 /// </summary>
 public class Result
 {
     /// <summary>
-    /// Indicates whether the serialization operation was successful
+    /// Indicates whether the serialization operation completed successfully.
+    /// True if the JSON data was successfully serialized to Avro format, false if an error occurred.
     /// </summary>
     /// <example>true</example>
     public bool Success { get; init; }
 
     /// <summary>
-    /// Path to the file with result
+    /// Full path to the created Avro file when serialization is successful.
+    /// Empty string when serialization fails.
     /// </summary>
     /// <example>C:\results\myfile.avro</example>
     public string FilePath { get; init; } = string.Empty;
 
     /// <summary>
-    /// Error information when task fails and ThrowErrorOnFailure is false
+    /// Error information when the serialization task fails and ThrowErrorOnFailure option is set to false.
+    /// Contains detailed error message and additional debugging information.
+    /// Null when the operation succeeds or when ThrowErrorOnFailure is true.
     /// </summary>
     public Error? Error { get; init; }
 }
