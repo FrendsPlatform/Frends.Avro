@@ -7,6 +7,7 @@ using Avro.File;
 using Avro.Generic;
 using Frends.Avro.Serialize.Definitions;
 using Frends.Avro.Serialize.Exceptions;
+using Frends.Avro.Serialize.Helpers;
 using Newtonsoft.Json.Linq;
 
 namespace Frends.Avro.Serialize;
