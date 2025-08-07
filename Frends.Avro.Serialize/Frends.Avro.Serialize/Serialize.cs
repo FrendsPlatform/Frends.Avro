@@ -21,19 +21,34 @@ public class Avro
     /// [Documentation](https://tasks.frends.com/tasks/frends-tasks/Frends.Avro.Serialize)
     /// </summary>
     /// <param name="input">Input parameters</param>
+    /// <param name="options">Options parameters</param>
     /// <returns>Object { string OutputPath }</returns>
-    public static Result Serialize([PropertyTab] Input input)
+    public static Result Serialize([PropertyTab] Input input, [PropertyTab] Options options)
     {
-        ValidateInputParameters(input);
+        try
+        {
+            ValidateInputParameters(input);
 
-        var jToken = JToken.Parse(input.Json);
-        if (jToken is not JArray)
-            jToken = new JArray(jToken);
-        var avroSchema = (RecordSchema)Schema.Parse(input.Schema);
+            var jToken = JToken.Parse(input.Json);
+            if (jToken is not JArray)
+                jToken = new JArray(jToken);
+            var avroSchema = (RecordSchema)Schema.Parse(input.Schema);
 
-        WriteAvroFile(input.TargetFilePath, avroSchema, jToken);
+            WriteAvroFile(input.TargetFilePath, avroSchema, jToken);
 
-        return new Result { FilePath = input.TargetFilePath };
+            return new Result { FilePath = input.TargetFilePath };
+        }
+        catch (Exception ex)
+        {
+            if (options.ThrowErrorOnFailure)
+                throw;
+            
+            var errorMessage = string.IsNullOrEmpty(options.ErrorMessageOnFailure) 
+                ? ex.Message 
+                : options.ErrorMessageOnFailure;
+            
+            return new Result { FilePath = "", ErrorMessage = errorMessage };
+        }
     }
 
     private static void ValidateInputParameters(Input input)

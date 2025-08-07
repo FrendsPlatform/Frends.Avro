@@ -20,7 +20,8 @@ public class Tests : TestsBase
                 Json = JsonWithArray,
                 Schema = Schema,
                 TargetFilePath = Path.Combine(testDirectory, "test.avro"),
-            }
+            },
+            new Options()
         );
         Assert.That.FileExists(result.FilePath);
         Assert.That.FileIsNotEmpty(result.FilePath);
@@ -35,7 +36,8 @@ public class Tests : TestsBase
                 Json = JsonWithObject,
                 Schema = Schema,
                 TargetFilePath = Path.Combine(testDirectory, "test.avro"),
-            }
+            },
+            new Options()
         );
         Assert.That.FileExists(result.FilePath);
         Assert.That.FileIsNotEmpty(result.FilePath);
@@ -51,7 +53,8 @@ public class Tests : TestsBase
                 Json = JsonWithoutName,
                 Schema = Schema,
                 TargetFilePath = Path.Combine(testDirectory, "test.avro"),
-            }
+            },
+            new Options()
         );
     }
 
@@ -65,7 +68,8 @@ public class Tests : TestsBase
                 Json = JsonWithArray,
                 Schema = Schema,
                 TargetFilePath = Path.Combine(testDirectory, "InvalidDirectory", "test.avro"),
-            }
+            },
+            new Options()
         );
     }
 
@@ -80,7 +84,8 @@ public class Tests : TestsBase
                 Json = JsonWithArray,
                 Schema = Schema,
                 TargetFilePath = Path.Combine(testDirectory, "test.avro"),
-            }
+            },
+            new Options()
         );
     }
 
@@ -94,7 +99,8 @@ public class Tests : TestsBase
                 Json = JsonWithArray,
                 Schema = "InvalidSchema",
                 TargetFilePath = Path.Combine(testDirectory, "test.avro"),
-            }
+            },
+            new Options()
         );
     }
 
@@ -108,7 +114,47 @@ public class Tests : TestsBase
                 Json = "InvalidJson",
                 Schema = Schema,
                 TargetFilePath = Path.Combine(testDirectory, "test.avro"),
+            },
+            new Options()
+        );
+    }
+
+    [TestMethod]
+    public void DoNotThrowErrorWhenThrowErrorOnFailureIsFalse()
+    {
+        var result = Avro.Serialize(
+            new Input
+            {
+                Json = "InvalidJson",
+                Schema = Schema,
+                TargetFilePath = Path.Combine(testDirectory, "test.avro"),
+            },
+            new Options { ThrowErrorOnFailure = false }
+        );
+        
+        Assert.AreEqual("", result.FilePath);
+        Assert.IsTrue(!string.IsNullOrEmpty(result.ErrorMessage));
+    }
+
+    [TestMethod]
+    public void UseCustomErrorMessageWhenProvided()
+    {
+        var customErrorMessage = "Custom error occurred";
+        var result = Avro.Serialize(
+            new Input
+            {
+                Json = "InvalidJson",
+                Schema = Schema,
+                TargetFilePath = Path.Combine(testDirectory, "test.avro"),
+            },
+            new Options 
+            { 
+                ThrowErrorOnFailure = false,
+                ErrorMessageOnFailure = customErrorMessage
             }
         );
+        
+        Assert.AreEqual("", result.FilePath);
+        Assert.AreEqual(customErrorMessage, result.ErrorMessage);
     }
 }
