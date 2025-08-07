@@ -22,7 +22,7 @@ public static class ErrorHandler
     /// <exception cref="Exception">Re-throws the original exception if ThrowErrorOnFailure option is set to true.</exception>
     /// <example>
     /// var result = ErrorHandler.Handle(new ArgumentException("Invalid data"), options);
-    /// if (!result.Success) 
+    /// if (!result.Success)
     /// {
     ///     Console.WriteLine($"Error: {result.Error.Message}");
     /// }
@@ -31,17 +31,17 @@ public static class ErrorHandler
     {
         if (options.ThrowErrorOnFailure)
             throw exception;
-        
-        var errorMessage = string.IsNullOrEmpty(options.ErrorMessageOnFailure) 
-            ? exception.Message 
+
+        var errorMessage = string.IsNullOrEmpty(options.ErrorMessageOnFailure)
+            ? exception.Message
             : options.ErrorMessageOnFailure;
-        
-        return new Result 
-        { 
+
+        return new Result
+        {
             Success = false,
-            FilePath = "", 
-            Error = new Error 
-            { 
+            FilePath = "",
+            Error = new Error
+            {
                 Message = errorMessage,
                 AdditionalInfo = new { ExceptionType = exception.GetType().Name, StackTrace = exception.StackTrace }
             }

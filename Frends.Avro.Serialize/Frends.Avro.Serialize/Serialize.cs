@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -36,7 +36,7 @@ public class Avro
     /// <exception cref="FileAlreadyExistsException">Thrown when the target file already exists.</exception>
     /// <exception cref="Newtonsoft.Json.JsonReaderException">Thrown when JSON or schema is invalid.</exception>
     /// <example>
-    /// var input = new Input 
+    /// var input = new Input
     /// {
     ///     Json = @"{ ""name"": ""John"", ""age"": 30 }",
     ///     Schema = @"{ ""type"": ""record"", ""name"": ""Person"", ""fields"": [...] }",

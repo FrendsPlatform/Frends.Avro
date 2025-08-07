@@ -133,7 +133,7 @@ public class Tests : TestsBase
             },
             new Options { ThrowErrorOnFailure = false }
         );
-        
+
         Assert.IsFalse(result.Success);
         Assert.AreEqual("", result.FilePath);
         Assert.IsNotNull(result.Error);
@@ -151,13 +151,13 @@ public class Tests : TestsBase
                 Schema = Schema,
                 TargetFilePath = Path.Combine(testDirectory, "test.avro"),
             },
-            new Options 
-            { 
+            new Options
+            {
                 ThrowErrorOnFailure = false,
                 ErrorMessageOnFailure = customErrorMessage
             }
         );
-        
+
         Assert.IsFalse(result.Success);
         Assert.AreEqual("", result.FilePath);
         Assert.IsNotNull(result.Error);
@@ -170,7 +170,7 @@ public class Tests : TestsBase
     {
         using var file = File.Create(Path.Combine(testDirectory, "test.avro"));
         file.Close();
-        
+
         var result = Avro.Serialize(
             new Input
             {
@@ -180,7 +180,7 @@ public class Tests : TestsBase
             },
             new Options { ThrowErrorOnFailure = false }
         );
-        
+
         Assert.IsFalse(result.Success);
         Assert.AreEqual("", result.FilePath);
         Assert.IsNotNull(result.Error);
@@ -199,7 +199,7 @@ public class Tests : TestsBase
             },
             new Options { ThrowErrorOnFailure = false }
         );
-        
+
         Assert.IsFalse(result.Success);
         Assert.AreEqual("", result.FilePath);
         Assert.IsNotNull(result.Error);
@@ -218,7 +218,7 @@ public class Tests : TestsBase
             },
             new Options { ThrowErrorOnFailure = false }
         );
-        
+
         Assert.IsFalse(result.Success);
         Assert.AreEqual("", result.FilePath);
         Assert.IsNotNull(result.Error);
@@ -238,7 +238,7 @@ public class Tests : TestsBase
             },
             new Options { ThrowErrorOnFailure = false }
         );
-        
+
         Assert.IsFalse(result.Success);
         Assert.AreEqual("", result.FilePath);
         Assert.IsNotNull(result.Error);
@@ -250,7 +250,7 @@ public class Tests : TestsBase
     public void OptionsDefaultValues()
     {
         var options = new Options();
-        
+
         Assert.IsTrue(options.ThrowErrorOnFailure);
         Assert.IsNull(options.ErrorMessageOnFailure);
     }
@@ -264,7 +264,7 @@ public class Tests : TestsBase
             ThrowErrorOnFailure = false,
             ErrorMessageOnFailure = customErrorMessage
         };
-        
+
         Assert.IsFalse(options.ThrowErrorOnFailure);
         Assert.AreEqual(customErrorMessage, options.ErrorMessageOnFailure);
     }
@@ -281,7 +281,7 @@ public class Tests : TestsBase
             },
             new Options()
         );
-        
+
         Assert.IsTrue(result.Success);
         Assert.IsNotNull(result.FilePath);
         Assert.IsTrue(result.FilePath.EndsWith("test.avro"));
@@ -300,7 +300,7 @@ public class Tests : TestsBase
             },
             new Options { ThrowErrorOnFailure = false }
         );
-        
+
         Assert.IsFalse(result.Success);
         Assert.AreEqual("", result.FilePath);
         Assert.IsNotNull(result.Error);
@@ -319,13 +319,13 @@ public class Tests : TestsBase
                 Schema = Schema,
                 TargetFilePath = Path.Combine(testDirectory, "test.avro"),
             },
-            new Options 
-            { 
+            new Options
+            {
                 ThrowErrorOnFailure = false,
                 ErrorMessageOnFailure = customMessage
             }
         );
-        
+
         Assert.IsFalse(result.Success);
         Assert.IsNotNull(result.Error);
         Assert.AreEqual(customMessage, result.Error.Message);
@@ -343,13 +343,13 @@ public class Tests : TestsBase
                 Schema = Schema,
                 TargetFilePath = Path.Combine(testDirectory, "test.avro"),
             },
-            new Options 
-            { 
+            new Options
+            {
                 ThrowErrorOnFailure = false,
                 ErrorMessageOnFailure = ""
             }
         );
-        
+
         Assert.IsFalse(result.Success);
         Assert.IsNotNull(result.Error);
         Assert.IsTrue(!string.IsNullOrEmpty(result.Error.Message));
@@ -366,13 +366,13 @@ public class Tests : TestsBase
                 Schema = Schema,
                 TargetFilePath = Path.Combine(testDirectory, "test.avro"),
             },
-            new Options 
-            { 
+            new Options
+            {
                 ThrowErrorOnFailure = false,
                 ErrorMessageOnFailure = null
             }
         );
-        
+
         Assert.IsFalse(result.Success);
         Assert.IsNotNull(result.Error);
         Assert.IsTrue(!string.IsNullOrEmpty(result.Error.Message));

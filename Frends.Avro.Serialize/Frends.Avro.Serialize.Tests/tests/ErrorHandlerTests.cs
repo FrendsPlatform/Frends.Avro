@@ -43,8 +43,8 @@ public class ErrorHandlerTests
         // Arrange
         var exception = new ArgumentException("Original exception message");
         var customMessage = "Custom error message";
-        var options = new Options 
-        { 
+        var options = new Options
+        {
             ThrowErrorOnFailure = false,
             ErrorMessageOnFailure = customMessage
         };
@@ -65,8 +65,8 @@ public class ErrorHandlerTests
     {
         // Arrange
         var exception = new ArgumentException("Original exception message");
-        var options = new Options 
-        { 
+        var options = new Options
+        {
             ThrowErrorOnFailure = false,
             ErrorMessageOnFailure = ""
         };
@@ -87,8 +87,8 @@ public class ErrorHandlerTests
     {
         // Arrange
         var exception = new ArgumentException("Original exception message");
-        var options = new Options 
-        { 
+        var options = new Options
+        {
             ThrowErrorOnFailure = false,
             ErrorMessageOnFailure = null
         };
