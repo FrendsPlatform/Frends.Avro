@@ -31,18 +31,18 @@ public class Avro
             jToken = new JArray(jToken);
         var avroSchema = (RecordSchema)Schema.Parse(input.Schema);
 
-        WriteAvroFile(input.OutputPath, avroSchema, jToken);
+        WriteAvroFile(input.TargetFilePath, avroSchema, jToken);
 
-        return new Result { FilePath = input.OutputPath };
+        return new Result { FilePath = input.TargetFilePath };
     }
 
     private static void ValidateInputParameters(Input input)
     {
-        var fileInfo = new FileInfo(input.OutputPath);
+        var fileInfo = new FileInfo(input.TargetFilePath);
         if (!fileInfo.Directory.Exists)
             throw new DirectoryNotFoundException();
         if (fileInfo.Exists)
-            throw new FileAlreadyExistsException(input.OutputPath);
+            throw new FileAlreadyExistsException(input.TargetFilePath);
     }
 
     private static void WriteAvroFile(string dstPath, RecordSchema schema, JToken json)

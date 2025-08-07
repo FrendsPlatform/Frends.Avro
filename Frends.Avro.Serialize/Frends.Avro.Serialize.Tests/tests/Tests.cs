@@ -19,7 +19,7 @@ public class Tests : TestsBase
             {
                 Json = JsonWithArray,
                 Schema = Schema,
-                OutputPath = Path.Combine(testDirectory, "test.avro"),
+                TargetFilePath = Path.Combine(testDirectory, "test.avro"),
             }
         );
         Assert.That.FileExists(result.FilePath);
@@ -34,7 +34,7 @@ public class Tests : TestsBase
             {
                 Json = JsonWithObject,
                 Schema = Schema,
-                OutputPath = Path.Combine(testDirectory, "test.avro"),
+                TargetFilePath = Path.Combine(testDirectory, "test.avro"),
             }
         );
         Assert.That.FileExists(result.FilePath);
@@ -50,7 +50,7 @@ public class Tests : TestsBase
             {
                 Json = JsonWithoutName,
                 Schema = Schema,
-                OutputPath = Path.Combine(testDirectory, "test.avro"),
+                TargetFilePath = Path.Combine(testDirectory, "test.avro"),
             }
         );
     }
@@ -64,7 +64,7 @@ public class Tests : TestsBase
             {
                 Json = JsonWithArray,
                 Schema = Schema,
-                OutputPath = Path.Combine(testDirectory, "InvalidDirectory", "test.avro"),
+                TargetFilePath = Path.Combine(testDirectory, "InvalidDirectory", "test.avro"),
             }
         );
     }
@@ -79,7 +79,7 @@ public class Tests : TestsBase
             {
                 Json = JsonWithArray,
                 Schema = Schema,
-                OutputPath = Path.Combine(testDirectory, "test.avro"),
+                TargetFilePath = Path.Combine(testDirectory, "test.avro"),
             }
         );
     }
@@ -93,7 +93,7 @@ public class Tests : TestsBase
             {
                 Json = JsonWithArray,
                 Schema = "InvalidSchema",
-                OutputPath = Path.Combine(testDirectory, "test.avro"),
+                TargetFilePath = Path.Combine(testDirectory, "test.avro"),
             }
         );
     }
@@ -107,7 +107,7 @@ public class Tests : TestsBase
             {
                 Json = "InvalidJson",
                 Schema = Schema,
-                OutputPath = Path.Combine(testDirectory, "test.avro"),
+                TargetFilePath = Path.Combine(testDirectory, "test.avro"),
             }
         );
     }

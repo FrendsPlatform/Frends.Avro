@@ -31,5 +31,5 @@ public class Input
     /// Path to the file where you want to store result
     /// </summary>
     /// <example>C:\results\myfile.avro</example>
-    public string OutputPath { get; init; }
+    public string TargetFilePath { get; init; }
 }
