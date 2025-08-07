@@ -1,7 +1,23 @@
 {
   "Tasks": [
     {
-      "TaskMethod": "Frends.Avro.Serialize.Avro.Serialize"
+      "TaskMethod": "Frends.Avro.Serialize.Avro.Serialize",
+      "DisplayName": "Serialize to Avro",
+      "Description": "Serializes JSON data to Avro file format using provided schema",
+      "Category": "Data",
+      "Tags": ["Avro", "Serialize", "JSON", "Data", "File"],
+      "Parameters": [
+        {
+          "Name": "Input",
+          "DisplayName": "Input Parameters",
+          "Description": "Input parameters for Avro serialization"
+        },
+        {
+          "Name": "Options",
+          "DisplayName": "Options",
+          "Description": "Configuration options for the serialization process"
+        }
+      ]
     }
   ]
 }
