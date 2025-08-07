@@ -10,4 +10,10 @@ public class Result
     /// </summary>
     /// <example>C:\results\myfile.avro</example>
     public string FilePath { get; init; }
+
+    /// <summary>
+    /// Error message when task fails and ThrowErrorOnFailure is false
+    /// </summary>
+    /// <example>Invalid JSON format</example>
+    public string ErrorMessage { get; init; } = "";
 }
