@@ -3,7 +3,6 @@ using System.IO;
 using Frends.Avro.Serialize.Definitions;
 using Frends.Avro.Serialize.Exceptions;
 using Frends.Avro.Serialize.Tests.asserts;
-using Frends.AzureDataLake.DownloadFiles.Tests.tests;
 using Newtonsoft.Json;
 
 namespace Frends.Avro.Serialize.Tests.tests;
