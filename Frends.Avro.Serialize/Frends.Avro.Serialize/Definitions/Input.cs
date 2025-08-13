@@ -10,7 +10,7 @@ public class Input
     /// The JSON data will be serialized according to the provided Avro schema.
     /// </summary>
     /// <example>
-    /// Single object: { "name": "Harry", "age": 30, "city": "New York" }
+    /// Single object: { "name": "Jerry", "age": 30, "city": "New York" }
     /// Array of objects: [{ "name": "John", "age": 30 }, { "name": "Jane", "age": 25 }]
     /// </example>
     public string Json { get; init; }
