@@ -31,20 +31,6 @@ public class Avro
     /// - FilePath: Path to the created Avro file (empty on failure)
     /// - Error: Detailed error information if serialization failed and ThrowErrorOnFailure is false
     /// </returns>
-    /// <exception cref="ArgumentException">Thrown when required fields are missing from JSON data.</exception>
-    /// <exception cref="DirectoryNotFoundException">Thrown when the target directory does not exist.</exception>
-    /// <exception cref="FileAlreadyExistsException">Thrown when the target file already exists.</exception>
-    /// <exception cref="Newtonsoft.Json.JsonReaderException">Thrown when JSON or schema is invalid.</exception>
-    /// <example>
-    /// var input = new Input
-    /// {
-    ///     Json = @"{ ""name"": ""John"", ""age"": 30 }",
-    ///     Schema = @"{ ""type"": ""record"", ""name"": ""Person"", ""fields"": [...] }",
-    ///     TargetFilePath = @"C:\output\data.avro"
-    /// };
-    /// var options = new Options { ThrowErrorOnFailure = false };
-    /// var result = Avro.Serialize(input, options);
-    /// </example>
     public static Result Serialize([PropertyTab] Input input, [PropertyTab] Options options)
     {
         try

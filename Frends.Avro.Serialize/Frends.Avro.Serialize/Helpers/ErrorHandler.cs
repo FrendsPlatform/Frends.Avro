@@ -19,32 +19,24 @@ public static class ErrorHandler
     /// A Result object containing error information if ThrowErrorOnFailure is false.
     /// If ThrowErrorOnFailure is true, the method re-throws the original exception.
     /// </returns>
-    /// <exception cref="Exception">Re-throws the original exception if ThrowErrorOnFailure option is set to true.</exception>
-    /// <example>
-    /// var result = ErrorHandler.Handle(new ArgumentException("Invalid data"), options);
-    /// if (!result.Success)
-    /// {
-    ///     Console.WriteLine($"Error: {result.Error.Message}");
-    /// }
-    /// </example>
     public static Result Handle(Exception exception, Options options)
     {
-        if (options.ThrowErrorOnFailure)
-            throw exception;
+        var error = new Error
+        {
+            Message = string.IsNullOrWhiteSpace(options.ErrorMessageOnFailure)
+                ? exception.Message
+                : $"{options.ErrorMessageOnFailure.Trim()} {exception.Message}".Trim(),
+            AdditionalInfo = exception,
+        };
 
-        var errorMessage = string.IsNullOrEmpty(options.ErrorMessageOnFailure)
-            ? exception.Message
-            : options.ErrorMessageOnFailure;
+        if (options.ThrowErrorOnFailure)
+            throw new Exception(error.Message, exception);
 
         return new Result
         {
             Success = false,
             FilePath = "",
-            Error = new Error
-            {
-                Message = errorMessage,
-                AdditionalInfo = new { ExceptionType = exception.GetType().Name, StackTrace = exception.StackTrace }
-            }
+            Error = error
         };
     }
 }

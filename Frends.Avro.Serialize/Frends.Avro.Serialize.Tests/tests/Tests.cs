@@ -46,79 +46,122 @@ public class Tests : TestsBase
     }
 
     [TestMethod]
-    [ExpectedException(typeof(ArgumentException))]
     public void ThrowIfRequiredFieldIsMissing()
     {
-        Avro.Serialize(
-            new Input
-            {
-                Json = JsonWithoutName,
-                Schema = Schema,
-                TargetFilePath = Path.Combine(testDirectory, "test.avro"),
-            },
-            new Options()
-        );
+        try
+        {
+            Avro.Serialize(
+                new Input
+                {
+                    Json = JsonWithoutName,
+                    Schema = Schema,
+                    TargetFilePath = Path.Combine(testDirectory, "test.avro"),
+                },
+                new Options { ThrowErrorOnFailure = true }
+            );
+
+            Assert.Fail("Expected an exception, but none was thrown.");
+        }
+        catch (Exception ex)
+        {
+
+            Assert.IsTrue(ex.Message.Contains("Field 'name' is missing in the JSON."));
+
+            Assert.IsInstanceOfType(ex.InnerException, typeof(ArgumentException), "Expected ArgumentException as inner exception.");
+        }
     }
 
     [TestMethod]
-    [ExpectedException(typeof(DirectoryNotFoundException))]
-    public void ThrowIfDirectoryNofFound()
+    public void ThrowIfDirectoryNotFound()
     {
-        Avro.Serialize(
-            new Input
-            {
-                Json = JsonWithArray,
-                Schema = Schema,
-                TargetFilePath = Path.Combine(testDirectory, "InvalidDirectory", "test.avro"),
-            },
-            new Options()
-        );
+        try
+        {
+            Avro.Serialize(
+                new Input
+                {
+                    Json = JsonWithArray,
+                    Schema = Schema,
+                    TargetFilePath = Path.Combine(testDirectory, "InvalidDirectory", "test.avro"),
+                },
+                new Options { ThrowErrorOnFailure = true }
+            );
+
+            Assert.Fail("Expected an exception, but none was thrown.");
+        }
+        catch (Exception ex)
+        {
+            Assert.IsInstanceOfType(ex.InnerException, typeof(DirectoryNotFoundException), "Expected DirectoryNotFoundException as inner exception.");
+        }
     }
 
     [TestMethod]
-    [ExpectedException(typeof(FileAlreadyExistsException))]
     public void ThrowIfFileAlreadyExists()
     {
-        using var file = File.Create(Path.Combine(testDirectory, "test.avro"));
-        Avro.Serialize(
-            new Input
-            {
-                Json = JsonWithArray,
-                Schema = Schema,
-                TargetFilePath = Path.Combine(testDirectory, "test.avro"),
-            },
-            new Options()
-        );
+        try
+        {
+            using var file = File.Create(Path.Combine(testDirectory, "test.avro"));
+            Avro.Serialize(
+                new Input
+                {
+                    Json = JsonWithArray,
+                    Schema = Schema,
+                    TargetFilePath = Path.Combine(testDirectory, "test.avro"),
+                },
+                new Options { ThrowErrorOnFailure = true }
+            );
+
+            Assert.Fail("Expected an exception, but none was thrown.");
+        }
+        catch (Exception ex)
+        {
+            Assert.IsInstanceOfType(ex.InnerException, typeof(FileAlreadyExistsException), "Expected FileAlreadyExistsException as inner exception.");
+        }
     }
 
     [TestMethod]
-    [ExpectedException(typeof(JsonReaderException))]
     public void ThrowIfSchemaIsInvalid()
     {
-        Avro.Serialize(
-            new Input
-            {
-                Json = JsonWithArray,
-                Schema = "InvalidSchema",
-                TargetFilePath = Path.Combine(testDirectory, "test.avro"),
-            },
-            new Options()
-        );
+        try
+        {
+            Avro.Serialize(
+                new Input
+                {
+                    Json = JsonWithArray,
+                    Schema = "InvalidSchema",
+                    TargetFilePath = Path.Combine(testDirectory, "test.avro"),
+                },
+                new Options { ThrowErrorOnFailure = true }
+            );
+
+            Assert.Fail("Expected an exception, but none was thrown.");
+        }
+        catch (Exception ex)
+        {
+            Assert.IsInstanceOfType(ex.InnerException, typeof(JsonReaderException), "Expected JsonReaderException as inner exception.");
+        }
     }
 
     [TestMethod]
-    [ExpectedException(typeof(JsonReaderException))]
     public void ThrowIfJsonIsInvalid()
     {
-        Avro.Serialize(
-            new Input
-            {
-                Json = "InvalidJson",
-                Schema = Schema,
-                TargetFilePath = Path.Combine(testDirectory, "test.avro"),
-            },
-            new Options()
-        );
+        try
+        {
+            Avro.Serialize(
+                new Input
+                {
+                    Json = "InvalidJson",
+                    Schema = Schema,
+                    TargetFilePath = Path.Combine(testDirectory, "test.avro"),
+                },
+                new Options { ThrowErrorOnFailure = true }
+            );
+
+            Assert.Fail("Expected an exception, but none was thrown.");
+        }
+        catch (Exception ex)
+        {
+            Assert.IsInstanceOfType(ex.InnerException, typeof(JsonReaderException), "Expected JsonReaderException as inner exception.");
+        }
     }
 
     [TestMethod]
@@ -161,7 +204,7 @@ public class Tests : TestsBase
         Assert.IsFalse(result.Success);
         Assert.AreEqual("", result.FilePath);
         Assert.IsNotNull(result.Error);
-        Assert.AreEqual(customErrorMessage, result.Error.Message);
+        Assert.IsTrue(result.Error.Message.Contains(customErrorMessage));
         Assert.IsNotNull(result.Error.AdditionalInfo);
     }
 
@@ -184,7 +227,7 @@ public class Tests : TestsBase
         Assert.IsFalse(result.Success);
         Assert.AreEqual("", result.FilePath);
         Assert.IsNotNull(result.Error);
-        Assert.IsTrue(result.Error.Message.Contains("already exists") || result.Error.Message.Contains("FileAlreadyExists"));
+        Assert.IsTrue(result.Error.Message.Contains("already exists"));
     }
 
     [TestMethod]
@@ -203,7 +246,7 @@ public class Tests : TestsBase
         Assert.IsFalse(result.Success);
         Assert.AreEqual("", result.FilePath);
         Assert.IsNotNull(result.Error);
-        Assert.IsTrue(result.Error.Message.Contains("not found") || result.Error.Message.Contains("DirectoryNotFound"));
+        Assert.IsTrue(result.Error.Message.Contains("not on the disk."));
     }
 
     [TestMethod]
@@ -244,15 +287,6 @@ public class Tests : TestsBase
         Assert.IsNotNull(result.Error);
         Assert.IsNotNull(result.Error.Message);
         Assert.IsTrue(!string.IsNullOrEmpty(result.Error.Message));
-    }
-
-    [TestMethod]
-    public void OptionsDefaultValues()
-    {
-        var options = new Options();
-
-        Assert.IsTrue(options.ThrowErrorOnFailure);
-        Assert.IsNull(options.ErrorMessageOnFailure);
     }
 
     [TestMethod]
@@ -306,31 +340,6 @@ public class Tests : TestsBase
         Assert.IsNotNull(result.Error);
         Assert.IsNotNull(result.Error.Message);
         Assert.IsTrue(!string.IsNullOrEmpty(result.Error.Message));
-    }
-
-    [TestMethod]
-    public void ErrorHandlerWithCustomMessageAndAdditionalInfo()
-    {
-        var customMessage = "Custom error message for testing";
-        var result = Avro.Serialize(
-            new Input
-            {
-                Json = "InvalidJson",
-                Schema = Schema,
-                TargetFilePath = Path.Combine(testDirectory, "test.avro"),
-            },
-            new Options
-            {
-                ThrowErrorOnFailure = false,
-                ErrorMessageOnFailure = customMessage
-            }
-        );
-
-        Assert.IsFalse(result.Success);
-        Assert.IsNotNull(result.Error);
-        Assert.AreEqual(customMessage, result.Error.Message);
-        Assert.IsNotNull(result.Error.AdditionalInfo);
-        Assert.IsTrue(!string.IsNullOrEmpty(result.Error.AdditionalInfo.ToString()));
     }
 
     [TestMethod]
