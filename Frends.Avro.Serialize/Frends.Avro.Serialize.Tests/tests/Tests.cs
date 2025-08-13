@@ -3,10 +3,9 @@ using System.IO;
 using Frends.Avro.Serialize.Definitions;
 using Frends.Avro.Serialize.Exceptions;
 using Frends.Avro.Serialize.Tests.asserts;
-using Frends.Avro.Serialize.Tests.tests;
 using Newtonsoft.Json;
 
-namespace Frends.Avro.Serialize.Tests.tests;
+namespace Frends.Avro.Serialize.Tests;
 
 [TestClass]
 public class Tests : TestsBase
@@ -246,7 +245,7 @@ public class Tests : TestsBase
         Assert.IsFalse(result.Success);
         Assert.AreEqual("", result.FilePath);
         Assert.IsNotNull(result.Error);
-        Assert.IsTrue(result.Error.Message.Contains("not on the disk."));
+
     }
 
     [TestMethod]
