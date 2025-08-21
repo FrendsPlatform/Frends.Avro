@@ -1,11 +1,12 @@
 using System;
 using System.IO;
+using System.Threading;
 using Frends.Avro.Serialize.Definitions;
 using Frends.Avro.Serialize.Exceptions;
 using Frends.Avro.Serialize.Tests.asserts;
 using Newtonsoft.Json;
 
-namespace Frends.Avro.Serialize.Tests;
+namespace Frends.Avro.Serialize.Tests.tests;
 
 [TestClass]
 public class Tests : TestsBase
@@ -20,7 +21,8 @@ public class Tests : TestsBase
                 Schema = Schema,
                 TargetFilePath = Path.Combine(testDirectory, "test.avro"),
             },
-            new Options()
+            new Options(),
+            CancellationToken.None
         );
         Assert.IsTrue(result.Success);
         Assert.That.FileExists(result.FilePath);
@@ -37,7 +39,8 @@ public class Tests : TestsBase
                 Schema = Schema,
                 TargetFilePath = Path.Combine(testDirectory, "test.avro"),
             },
-            new Options()
+            new Options(),
+            CancellationToken.None
         );
         Assert.IsTrue(result.Success);
         Assert.That.FileExists(result.FilePath);
@@ -56,7 +59,8 @@ public class Tests : TestsBase
                     Schema = Schema,
                     TargetFilePath = Path.Combine(testDirectory, "test.avro"),
                 },
-                new Options { ThrowErrorOnFailure = true }
+                new Options { ThrowErrorOnFailure = true },
+                CancellationToken.None
             );
 
             Assert.Fail("Expected an exception, but none was thrown.");
@@ -82,7 +86,8 @@ public class Tests : TestsBase
                     Schema = Schema,
                     TargetFilePath = Path.Combine(testDirectory, "InvalidDirectory", "test.avro"),
                 },
-                new Options { ThrowErrorOnFailure = true }
+                new Options { ThrowErrorOnFailure = true },
+                CancellationToken.None
             );
 
             Assert.Fail("Expected an exception, but none was thrown.");
@@ -106,7 +111,8 @@ public class Tests : TestsBase
                     Schema = Schema,
                     TargetFilePath = Path.Combine(testDirectory, "test.avro"),
                 },
-                new Options { ThrowErrorOnFailure = true }
+                new Options { ThrowErrorOnFailure = true },
+                CancellationToken.None
             );
 
             Assert.Fail("Expected an exception, but none was thrown.");
@@ -129,7 +135,8 @@ public class Tests : TestsBase
                     Schema = "InvalidSchema",
                     TargetFilePath = Path.Combine(testDirectory, "test.avro"),
                 },
-                new Options { ThrowErrorOnFailure = true }
+                new Options { ThrowErrorOnFailure = true },
+                CancellationToken.None
             );
 
             Assert.Fail("Expected an exception, but none was thrown.");
@@ -152,7 +159,8 @@ public class Tests : TestsBase
                     Schema = Schema,
                     TargetFilePath = Path.Combine(testDirectory, "test.avro"),
                 },
-                new Options { ThrowErrorOnFailure = true }
+                new Options { ThrowErrorOnFailure = true },
+                CancellationToken.None
             );
 
             Assert.Fail("Expected an exception, but none was thrown.");
@@ -173,7 +181,8 @@ public class Tests : TestsBase
                 Schema = Schema,
                 TargetFilePath = Path.Combine(testDirectory, "test.avro"),
             },
-            new Options { ThrowErrorOnFailure = false }
+            new Options { ThrowErrorOnFailure = false },
+            CancellationToken.None
         );
 
         Assert.IsFalse(result.Success);
@@ -197,7 +206,9 @@ public class Tests : TestsBase
             {
                 ThrowErrorOnFailure = false,
                 ErrorMessageOnFailure = customErrorMessage
-            }
+            },
+            CancellationToken.None
+
         );
 
         Assert.IsFalse(result.Success);
@@ -220,7 +231,8 @@ public class Tests : TestsBase
                 Schema = Schema,
                 TargetFilePath = Path.Combine(testDirectory, "test.avro"),
             },
-            new Options { ThrowErrorOnFailure = false }
+            new Options { ThrowErrorOnFailure = false },
+            CancellationToken.None
         );
 
         Assert.IsFalse(result.Success);
@@ -239,7 +251,8 @@ public class Tests : TestsBase
                 Schema = Schema,
                 TargetFilePath = Path.Combine(testDirectory, "InvalidDirectory", "test.avro"),
             },
-            new Options { ThrowErrorOnFailure = false }
+            new Options { ThrowErrorOnFailure = false },
+            CancellationToken.None
         );
 
         Assert.IsFalse(result.Success);
@@ -258,7 +271,8 @@ public class Tests : TestsBase
                 Schema = Schema,
                 TargetFilePath = Path.Combine(testDirectory, "test.avro"),
             },
-            new Options { ThrowErrorOnFailure = false }
+            new Options { ThrowErrorOnFailure = false },
+            CancellationToken.None
         );
 
         Assert.IsFalse(result.Success);
@@ -278,7 +292,8 @@ public class Tests : TestsBase
                 Schema = "InvalidSchema",
                 TargetFilePath = Path.Combine(testDirectory, "test.avro"),
             },
-            new Options { ThrowErrorOnFailure = false }
+            new Options { ThrowErrorOnFailure = false },
+            CancellationToken.None
         );
 
         Assert.IsFalse(result.Success);
@@ -312,7 +327,8 @@ public class Tests : TestsBase
                 Schema = Schema,
                 TargetFilePath = Path.Combine(testDirectory, "test.avro"),
             },
-            new Options()
+            new Options(),
+            CancellationToken.None
         );
 
         Assert.IsTrue(result.Success);
@@ -331,7 +347,8 @@ public class Tests : TestsBase
                 Schema = Schema,
                 TargetFilePath = Path.Combine(testDirectory, "test.avro"),
             },
-            new Options { ThrowErrorOnFailure = false }
+            new Options { ThrowErrorOnFailure = false },
+            CancellationToken.None
         );
 
         Assert.IsFalse(result.Success);
@@ -355,7 +372,8 @@ public class Tests : TestsBase
             {
                 ThrowErrorOnFailure = false,
                 ErrorMessageOnFailure = ""
-            }
+            },
+            CancellationToken.None
         );
 
         Assert.IsFalse(result.Success);
@@ -378,7 +396,8 @@ public class Tests : TestsBase
             {
                 ThrowErrorOnFailure = false,
                 ErrorMessageOnFailure = null
-            }
+            },
+            CancellationToken.None
         );
 
         Assert.IsFalse(result.Success);

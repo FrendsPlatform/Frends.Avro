@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Threading;
 using Avro;
 using Avro.File;
 using Avro.Generic;
@@ -16,7 +17,7 @@ namespace Frends.Avro.Serialize;
 /// Main class containing Avro serialization functionality.
 /// Provides methods to serialize JSON data into Avro binary format using Apache Avro library.
 /// </summary>
-public class Avro
+public static class Avro
 {
     /// <summary>
     /// Serializes JSON data into Avro binary format and saves it to a file.
@@ -25,13 +26,14 @@ public class Avro
     /// </summary>
     /// <param name="input">Input parameters containing the JSON data to serialize, Avro schema definition, and target file path.</param>
     /// <param name="options">Configuration options for error handling behavior and custom error messages.</param>
+    /// <param name="cancellationToken"/>
     /// <returns>
     /// A Result object containing:
     /// - Success: Boolean indicating if serialization completed successfully
     /// - FilePath: Path to the created Avro file (empty on failure)
     /// - Error: Detailed error information if serialization failed and ThrowErrorOnFailure is false
     /// </returns>
-    public static Result Serialize([PropertyTab] Input input, [PropertyTab] Options options)
+    public static Result Serialize([PropertyTab] Input input, [PropertyTab] Options options, CancellationToken cancellationToken)
     {
         try
         {
@@ -42,7 +44,7 @@ public class Avro
                 jToken = new JArray(jToken);
             var avroSchema = (RecordSchema)Schema.Parse(input.Schema);
 
-            WriteAvroFile(input.TargetFilePath, avroSchema, jToken);
+            WriteAvroFile(input.TargetFilePath, avroSchema, jToken, cancellationToken);
 
             return new Result { Success = true, FilePath = input.TargetFilePath };
         }
@@ -73,7 +75,8 @@ public class Avro
     /// <param name="dstPath">Destination file path for the Avro file.</param>
     /// <param name="schema">Avro record schema to use for serialization.</param>
     /// <param name="json">JSON data to serialize (can be single object or array).</param>
-    private static void WriteAvroFile(string dstPath, RecordSchema schema, JToken json)
+    /// <param name="cancellationToken"/>
+    private static void WriteAvroFile(string dstPath, RecordSchema schema, JToken json, CancellationToken cancellationToken)
     {
         using var fileWriter = DataFileWriter<GenericRecord>.OpenWriter(
             new GenericWriter<GenericRecord>(schema),
@@ -81,6 +84,7 @@ public class Avro
         );
         foreach (var recordJToken in json)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             var record = JTokenToGenericRecord(recordJToken, schema);
             fileWriter.Append(record);
         }

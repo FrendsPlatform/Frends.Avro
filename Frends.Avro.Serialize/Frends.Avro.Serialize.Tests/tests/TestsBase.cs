@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace Frends.Avro.Serialize.Tests;
+namespace Frends.Avro.Serialize.Tests.tests;
 
 [TestClass]
 public abstract class TestsBase
