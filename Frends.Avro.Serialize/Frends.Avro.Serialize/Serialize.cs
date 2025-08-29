@@ -1,51 +1,82 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Threading;
 using Avro;
 using Avro.File;
 using Avro.Generic;
 using Frends.Avro.Serialize.Definitions;
 using Frends.Avro.Serialize.Exceptions;
+using Frends.Avro.Serialize.Helpers;
 using Newtonsoft.Json.Linq;
 
 namespace Frends.Avro.Serialize;
 
 /// <summary>
-/// Avro task.
+/// Main class containing Avro serialization functionality.
+/// Provides methods to serialize JSON data into Avro binary format using Apache Avro library.
 /// </summary>
-public class Avro
+public static class Avro
 {
     /// <summary>
-    /// Serialize JSON into Avro.
+    /// Serializes JSON data into Avro binary format and saves it to a file.
+    /// Supports both single JSON objects and arrays of objects. The JSON structure must match the provided Avro schema.
     /// [Documentation](https://tasks.frends.com/tasks/frends-tasks/Frends.Avro.Serialize)
     /// </summary>
-    /// <param name="input">Input parameters</param>
-    /// <returns>Object { string OutputPath }</returns>
-    public static Result Serialize([PropertyTab] Input input)
+    /// <param name="input">Input parameters containing the JSON data to serialize, Avro schema definition, and target file path.</param>
+    /// <param name="options">Configuration options for error handling behavior and custom error messages.</param>
+    /// <param name="cancellationToken"/>
+    /// <returns>
+    /// A Result object containing:
+    /// - Success: Boolean indicating if serialization completed successfully
+    /// - FilePath: Path to the created Avro file (empty on failure)
+    /// - Error: Detailed error information if serialization failed and ThrowErrorOnFailure is false
+    /// </returns>
+    public static Result Serialize([PropertyTab] Input input, [PropertyTab] Options options, CancellationToken cancellationToken)
     {
-        ValidateInputParameters(input);
+        try
+        {
+            ValidateInputParameters(input);
 
-        var jToken = JToken.Parse(input.Json);
-        if (jToken is not JArray)
-            jToken = new JArray(jToken);
-        var avroSchema = (RecordSchema)Schema.Parse(input.Schema);
+            var jToken = JToken.Parse(input.Json);
+            if (jToken is not JArray)
+                jToken = new JArray(jToken);
+            var avroSchema = (RecordSchema)Schema.Parse(input.Schema);
 
-        WriteAvroFile(input.OutputPath, avroSchema, jToken);
+            WriteAvroFile(input.TargetFilePath, avroSchema, jToken, cancellationToken);
 
-        return new Result { FilePath = input.OutputPath };
+            return new Result { Success = true, FilePath = input.TargetFilePath };
+        }
+        catch (Exception ex)
+        {
+            return ErrorHandler.Handle(ex, options);
+        }
     }
 
+    /// <summary>
+    /// Validates input parameters to ensure the target directory exists and file doesn't already exist.
+    /// </summary>
+    /// <param name="input">Input parameters to validate.</param>
+    /// <exception cref="DirectoryNotFoundException">Thrown when target directory doesn't exist.</exception>
+    /// <exception cref="FileAlreadyExistsException">Thrown when target file already exists.</exception>
     private static void ValidateInputParameters(Input input)
     {
-        var fileInfo = new FileInfo(input.OutputPath);
+        var fileInfo = new FileInfo(input.TargetFilePath);
         if (!fileInfo.Directory.Exists)
             throw new DirectoryNotFoundException();
         if (fileInfo.Exists)
-            throw new FileAlreadyExistsException(input.OutputPath);
+            throw new FileAlreadyExistsException(input.TargetFilePath);
     }
 
-    private static void WriteAvroFile(string dstPath, RecordSchema schema, JToken json)
+    /// <summary>
+    /// Writes JSON data to an Avro file using the specified schema.
+    /// </summary>
+    /// <param name="dstPath">Destination file path for the Avro file.</param>
+    /// <param name="schema">Avro record schema to use for serialization.</param>
+    /// <param name="json">JSON data to serialize (can be single object or array).</param>
+    /// <param name="cancellationToken"/>
+    private static void WriteAvroFile(string dstPath, RecordSchema schema, JToken json, CancellationToken cancellationToken)
     {
         using var fileWriter = DataFileWriter<GenericRecord>.OpenWriter(
             new GenericWriter<GenericRecord>(schema),
@@ -53,11 +84,20 @@ public class Avro
         );
         foreach (var recordJToken in json)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             var record = JTokenToGenericRecord(recordJToken, schema);
             fileWriter.Append(record);
         }
     }
 
+    /// <summary>
+    /// Converts a JSON token to an Avro GenericRecord based on the provided schema.
+    /// Recursively handles nested record structures.
+    /// </summary>
+    /// <param name="jToken">JSON token to convert.</param>
+    /// <param name="avroSchema">Avro record schema defining the structure.</param>
+    /// <returns>GenericRecord containing the converted data.</returns>
+    /// <exception cref="ArgumentException">Thrown when required fields are missing from JSON.</exception>
     static GenericRecord JTokenToGenericRecord(JToken jToken, RecordSchema avroSchema)
     {
         var genericRecord = new GenericRecord(avroSchema);
@@ -83,6 +123,12 @@ public class Avro
         return genericRecord;
     }
 
+    /// <summary>
+    /// Maps Avro schema types to corresponding C# types for JSON deserialization.
+    /// </summary>
+    /// <param name="avroType">Avro schema type to convert.</param>
+    /// <returns>Corresponding C# type.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when an unsupported Avro type is encountered.</exception>
     private static Type AvroTypeToCSharpType(Schema.Type avroType) =>
         avroType switch
         {

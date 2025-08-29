@@ -1,0 +1,28 @@
+﻿[
+    {
+        "Task": "Frends.Avro.Serialize",
+        "Migrations": [
+            {
+                "Version": "2.0.0",
+                "Description": "Breaking changes: Renamed OutputPath to TargetFilePath, added Options tab with error handling, updated Result structure",
+                "Migration": [
+                    {
+                        "Type": "Copy",
+                        "Source": "Input.OutputPath",
+                        "Target": "Input.TargetFilePath"
+                    },
+                    {
+                        "Type": "Set",
+                        "Target": "Options.ThrowErrorOnFailure",
+                        "Value": "True"
+                    },
+                    {
+                        "Type": "Set",
+                        "Target": "Options.ErrorMessageOnFailure",
+                        "Value": "\"\""
+                    }
+                ]
+            }
+        ]
+    }
+]
