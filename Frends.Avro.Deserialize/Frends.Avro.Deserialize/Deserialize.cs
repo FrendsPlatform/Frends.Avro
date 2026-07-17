@@ -12,7 +12,7 @@ namespace Frends.Avro.Deserialize;
 /// <summary>
 /// Provides functionality for deserializing Avro files to JSON format.
 /// </summary>
-public class Avro
+public static class Avro
 {
     /// <summary>
     /// Deserializes an Avro file to JSON format.
