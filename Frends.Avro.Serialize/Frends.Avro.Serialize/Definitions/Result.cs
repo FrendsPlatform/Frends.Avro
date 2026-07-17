@@ -26,5 +26,6 @@ public class Result
     /// Contains detailed error message and additional debugging information.
     /// Null when the operation succeeds or when ThrowErrorOnFailure is true.
     /// </summary>
+    /// <example>null</example>
     public Error? Error { get; init; }
 }
