@@ -1,5 +1,11 @@
 ﻿# Changelog
 
+## [2.2.0] - 2026-09-28
+
+### Added
+
+- Add support for JsonSchema and both Avro Object Container Files and raw Avro files. The task will now automatically detect the file type and deserialize accordingly.
+
 ## [2.1.0] - 2026-07-17
 
 ### Changed

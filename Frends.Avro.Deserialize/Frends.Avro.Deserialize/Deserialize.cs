@@ -1,8 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
+using System.IO;
+using System.Linq;
 using System.Threading;
+using Avro;
 using Avro.File;
 using Avro.Generic;
+using Avro.IO;
 using Frends.Avro.Deserialize.Definitions;
 using Frends.Avro.Deserialize.Helpers;
 using Newtonsoft.Json.Linq;
@@ -10,44 +14,42 @@ using Newtonsoft.Json.Linq;
 namespace Frends.Avro.Deserialize;
 
 /// <summary>
-/// Provides functionality for deserializing Avro files to JSON format.
+/// Provides functionality for deserializing Avro files and raw Avro payloads to JSON format.
 /// </summary>
 public static class Avro
 {
     /// <summary>
-    /// Deserializes an Avro file to JSON format.
-    /// Reads all records from the specified Avro file and converts them to a JSON array.
-    /// Each record in the Avro file becomes a JSON object in the resulting array.
+    /// Deserializes an Avro object container file or a raw Avro binary file to JSON format.
+    /// Reads all records from the file and converts them to a JSON array.
     /// [Documentation](https://tasks.frends.com/tasks/frends-tasks/Frends.Avro.Deserialize)
     /// </summary>
-    /// <param name="input">Input parameters containing the file path to the Avro file.</param>
+    /// <param name="input">Input parameters containing an Avro file path and an optional schema for raw Avro data.</param>
     /// <param name="options">Configuration options for the deserialization operation.</param>
     /// <param name="cancellationToken">Cancellation token from Frends platform for operation cancellation.</param>
     /// <returns>A Result object containing the deserialized JSON data, success status, and error information if applicable.</returns>
-    public static Result Deserialize([PropertyTab] Input input, [PropertyTab] Options options, CancellationToken cancellationToken)
+    public static Result Deserialize([PropertyTab] Input input, [PropertyTab] Options options,
+        CancellationToken cancellationToken)
     {
         try
         {
-            using var dataFileReader = DataFileReader<GenericRecord>.OpenReader(input.FilePath);
-            var result = new JArray();
+            using var fileStream = File.OpenRead(input.FilePath);
+            var isObjectContainer = AvroHandler.IsObjectContainer(fileStream);
 
-            foreach (var record in dataFileReader.NextEntries)
+            if (isObjectContainer)
             {
-                var obj = new JObject();
-                foreach (var field in record.Schema.Fields)
-                {
-                    var value = record.GetValue(field.Pos);
-                    var token = value is null ? null : JToken.FromObject(value);
-                    obj.Add(field.Name, token);
-                }
-
-                result.Add(obj);
-                if (cancellationToken.IsCancellationRequested)
-                {
-                    break;
-                }
+                var readerSchema = string.IsNullOrWhiteSpace(input.SchemaJson)
+                    ? null
+                    : Schema.Parse(input.SchemaJson);
+                return AvroHandler.DeserializeObjectContainer(fileStream, readerSchema, cancellationToken);
             }
-            return new Result { Json = result, Success = true, Error = null };
+
+            if (string.IsNullOrWhiteSpace(input.SchemaJson))
+            {
+                throw new InvalidDataException(
+                    "The file contains raw Avro binary data. SchemaJson is required because raw Avro data does not contain a schema.");
+            }
+
+            return AvroHandler.DeserializeRawFile(fileStream, Schema.Parse(input.SchemaJson), cancellationToken);
         }
         catch (Exception ex)
         {
