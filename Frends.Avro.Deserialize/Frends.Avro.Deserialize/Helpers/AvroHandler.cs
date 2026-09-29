@@ -24,7 +24,7 @@ internal static class AvroHandler
 
         foreach (var record in dataFileReader.NextEntries)
         {
-            result.Add(ToJsonObject(record));
+            result.Add(JsonHandler.ToJsonObject(record));
             cancellationToken.ThrowIfCancellationRequested();
         }
 
@@ -48,7 +48,7 @@ internal static class AvroHandler
         while (stream.Position < stream.Length)
         {
             var record = reader.Read(null, decoder);
-            result.Add(ToJsonObject(record));
+            result.Add(JsonHandler.ToJsonObject(record));
             cancellationToken.ThrowIfCancellationRequested();
         }
 
@@ -68,17 +68,5 @@ internal static class AvroHandler
 
         return bytesRead == DataFileConstants.Magic.Length &&
                header.SequenceEqual(DataFileConstants.Magic);
-    }
-
-    private static JObject ToJsonObject(GenericRecord record)
-    {
-        var obj = new JObject();
-        foreach (var field in record.Schema.Fields)
-        {
-            var value = record.GetValue(field.Pos);
-            obj.Add(field.Name, value is null ? null : JToken.FromObject(value));
-        }
-
-        return obj;
     }
 }

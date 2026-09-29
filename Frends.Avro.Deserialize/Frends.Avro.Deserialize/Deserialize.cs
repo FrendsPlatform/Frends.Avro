@@ -1,15 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using Avro;
-using Avro.File;
-using Avro.Generic;
-using Avro.IO;
 using Frends.Avro.Deserialize.Definitions;
 using Frends.Avro.Deserialize.Helpers;
-using Newtonsoft.Json.Linq;
 
 namespace Frends.Avro.Deserialize;
 

@@ -15,19 +15,19 @@ public class Tests : TestsBase
         const string payload =
             "EEpvaG4gRG9lAQAAAAAAAJBlQBBOZXcgWW9ya+F6FK6nAMRAEEpvaG4gRG9lAQAAAAAAAJBlQBBOZXcgWW9ya+F6FK6nAMRA";
         const string schemaJson = """
-        {
-          "type": "record",
-          "name": "Record",
-          "fields": [
-            { "name": "name", "type": "string" },
-            { "name": "isHuman", "type": "boolean" },
-            { "name": "age", "type": ["null", "long"] },
-            { "name": "height", "type": "double" },
-            { "name": "city", "type": "string" },
-            { "name": "balance", "type": "double" }
-          ]
-        }
-        """;
+                                  {
+                                    "type": "record",
+                                    "name": "Record",
+                                    "fields": [
+                                      { "name": "name", "type": "string" },
+                                      { "name": "isHuman", "type": "boolean" },
+                                      { "name": "age", "type": ["null", "long"] },
+                                      { "name": "height", "type": "double" },
+                                      { "name": "city", "type": "string" },
+                                      { "name": "balance", "type": "double" }
+                                    ]
+                                  }
+                                  """;
         var tempPath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.avro");
 
         try
@@ -35,7 +35,11 @@ public class Tests : TestsBase
             File.WriteAllBytes(tempPath, Convert.FromBase64String(payload));
 
             var result = Avro.Deserialize(
-                new Input { FilePath = tempPath, SchemaJson = schemaJson },
+                new Input
+                {
+                    FilePath = tempPath,
+                    SchemaJson = schemaJson
+                },
                 new Options(),
                 CancellationToken.None
             );
@@ -88,18 +92,68 @@ public class Tests : TestsBase
     }
 
     [TestMethod]
+    public void RawFileConvertsNestedRecordsInsideCollections()
+    {
+        const string payload = "AgZBZGEA";
+        const string schemaJson = """
+                                  {
+                                    "type": "record",
+                                    "name": "Root",
+                                    "fields": [
+                                      {
+                                        "name": "items",
+                                        "type": {
+                                          "type": "array",
+                                          "items": {
+                                            "type": "record",
+                                            "name": "Item",
+                                            "fields": [
+                                              { "name": "name", "type": "string" }
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                  """;
+        var tempPath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.avro");
+
+        try
+        {
+            File.WriteAllBytes(tempPath, Convert.FromBase64String(payload));
+
+            var result = Avro.Deserialize(
+                new Input
+                {
+                    FilePath = tempPath,
+                    SchemaJson = schemaJson
+                },
+                new Options(),
+                CancellationToken.None
+            );
+
+            Assert.IsTrue(result.Success);
+            Assert.AreEqual("Ada", result.Json[0]["items"][0]["name"].ToString());
+        }
+        finally
+        {
+            File.Delete(tempPath);
+        }
+    }
+
+    [TestMethod]
     public void ObjectContainerFileWithReaderSchemaUsesDefaultForMissingField()
     {
         const string readerSchema = """
-        {
-          "type": "record",
-          "name": "Record",
-          "fields": [
-            { "name": "name", "type": "string" },
-            { "name": "newField", "type": ["null", "string"], "default": null }
-          ]
-        }
-        """;
+                                    {
+                                      "type": "record",
+                                      "name": "Record",
+                                      "fields": [
+                                        { "name": "name", "type": "string" },
+                                        { "name": "newField", "type": ["string", "null"], "default": "default value" }
+                                      ]
+                                    }
+                                    """;
 
         var result = Avro.Deserialize(
             new Input
@@ -114,17 +168,17 @@ public class Tests : TestsBase
         Assert.IsTrue(result.Success);
         Assert.IsNull(result.Error);
         Assert.AreEqual("John Doe", result.Json[0]["name"].ToString());
-        Assert.AreEqual(JTokenType.Null, result.Json[0]["newField"].Type);
+        Assert.AreEqual("default value", result.Json[0]["newField"].ToString());
 
         const string incompatibleReaderSchema = """
-        {
-          "type": "record",
-          "name": "Record",
-          "fields": [
-            { "name": "name", "type": "int" }
-          ]
-        }
-        """;
+                                                {
+                                                  "type": "record",
+                                                  "name": "Record",
+                                                  "fields": [
+                                                    { "name": "name", "type": "int" }
+                                                  ]
+                                                }
+                                                """;
 
         var incompatibleResult = Avro.Deserialize(
             new Input
