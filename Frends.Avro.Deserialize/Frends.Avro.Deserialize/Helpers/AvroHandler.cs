@@ -25,10 +25,7 @@ internal static class AvroHandler
         foreach (var record in dataFileReader.NextEntries)
         {
             result.Add(ToJsonObject(record));
-            if (cancellationToken.IsCancellationRequested)
-            {
-                break;
-            }
+            cancellationToken.ThrowIfCancellationRequested();
         }
 
         return new Result
@@ -52,11 +49,7 @@ internal static class AvroHandler
         {
             var record = reader.Read(null, decoder);
             result.Add(ToJsonObject(record));
-
-            if (cancellationToken.IsCancellationRequested)
-            {
-                break;
-            }
+            cancellationToken.ThrowIfCancellationRequested();
         }
 
         return new Result
