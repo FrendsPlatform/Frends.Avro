@@ -62,6 +62,128 @@ public class Tests : TestsBase
     }
 
     [TestMethod]
+    public void ObjectContainerIsDeserializedFromFilePathDataSource()
+    {
+        var result = Avro.Deserialize(
+            new Input
+            {
+                DataSource = DataSource.FilePath,
+                FilePath = Path.Combine(testFileParentPath, "test.avro")
+            },
+            new Options(),
+            CancellationToken.None
+        );
+
+        Assert.IsTrue(result.Success);
+        Assert.IsNull(result.Error);
+        Assert.AreEqual(ExpectedResult.ToString(), result.Json.ToString());
+    }
+
+    [TestMethod]
+    public void ObjectContainerIsDeserializedFromFileBytesDataSource()
+    {
+        var result = Avro.Deserialize(
+            new Input
+            {
+                DataSource = DataSource.FileBytes,
+                FileBytes = File.ReadAllBytes(Path.Combine(testFileParentPath, "test.avro"))
+            },
+            new Options(),
+            CancellationToken.None
+        );
+
+        Assert.IsTrue(result.Success);
+        Assert.IsNull(result.Error);
+        Assert.AreEqual(ExpectedResult.ToString(), result.Json.ToString());
+    }
+
+    [TestMethod]
+    public void RawDataWithSchemaIsDeserializedFromFileBytesDataSource()
+    {
+        const string payload =
+            "EEpvaG4gRG9lAQAAAAAAAJBlQBBOZXcgWW9ya+F6FK6nAMRAEEpvaG4gRG9lAQAAAAAAAJBlQBBOZXcgWW9ya+F6FK6nAMRA";
+        const string schemaJson = """
+                                  {
+                                    "type": "record",
+                                    "name": "Record",
+                                    "fields": [
+                                      { "name": "name", "type": "string" },
+                                      { "name": "isHuman", "type": "boolean" },
+                                      { "name": "age", "type": ["null", "long"] },
+                                      { "name": "height", "type": "double" },
+                                      { "name": "city", "type": "string" },
+                                      { "name": "balance", "type": "double" }
+                                    ]
+                                  }
+                                  """;
+
+        var result = Avro.Deserialize(
+            new Input
+            {
+                DataSource = DataSource.FileBytes,
+                FileBytes = Convert.FromBase64String(payload),
+                SchemaJson = schemaJson
+            },
+            new Options(),
+            CancellationToken.None
+        );
+
+        Assert.IsTrue(result.Success);
+        Assert.IsNull(result.Error);
+        Assert.AreEqual(2, result.Json.Count);
+        Assert.AreEqual("John Doe", result.Json[0]["name"].ToString());
+        Assert.AreEqual(10241.31, (double)result.Json[1]["balance"]);
+    }
+
+    [TestMethod]
+    public void FileBytesDataSourceIgnoresFilePath()
+    {
+        var result = Avro.Deserialize(
+            new Input
+            {
+                DataSource = DataSource.FileBytes,
+                FilePath = Path.Combine(testFileParentPath, "ThisFileShouldNotExist.avro"),
+                FileBytes = File.ReadAllBytes(Path.Combine(testFileParentPath, "test.avro"))
+            },
+            new Options(),
+            CancellationToken.None
+        );
+
+        Assert.IsTrue(result.Success);
+        Assert.AreEqual(ExpectedResult.ToString(), result.Json.ToString());
+    }
+
+    [TestMethod]
+    public void NullFileBytesThrowsException()
+    {
+        Assert.ThrowsException<ArgumentNullException>(() =>
+        {
+            Avro.Deserialize(
+                new Input { DataSource = DataSource.FileBytes, FileBytes = null },
+                new Options(),
+                CancellationToken.None
+            );
+        });
+    }
+
+    [TestMethod]
+    public void RawFileBytesWithoutSchemaReturnsError()
+    {
+        var result = Avro.Deserialize(
+            new Input
+            {
+                DataSource = DataSource.FileBytes,
+                FileBytes = Convert.FromBase64String("EEpvaG4gRG9lAQAAAAAAAJBlQBBOZXcgWW9ya+F6FK6nAMRA")
+            },
+            new Options { ThrowErrorOnFailure = false },
+            CancellationToken.None
+        );
+
+        Assert.IsFalse(result.Success);
+        Assert.IsNotNull(result.Error);
+    }
+
+    [TestMethod]
     public void RawFileWithoutSchemaReturnsError()
     {
         const string payload =
