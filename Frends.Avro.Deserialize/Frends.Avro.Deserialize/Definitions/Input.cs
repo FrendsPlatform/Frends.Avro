@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Frends.Avro.Deserialize.Definitions;
@@ -8,12 +9,29 @@ namespace Frends.Avro.Deserialize.Definitions;
 public class Input
 {
     /// <summary>
+    /// Defines whether the Avro data is read from a file (FilePath) or provided directly as a byte array (FileBytes).
+    /// </summary>
+    /// <example>DataSource.FilePath</example>
+    [DefaultValue(DataSource.FilePath)]
+    public DataSource DataSource { get; init; } = DataSource.FilePath;
+
+    /// <summary>
     /// Gets or sets the path to the Avro file you want to deserialize.
     /// The file can be an Avro object container file, or raw Avro binary data when SchemaJson is provided.
     /// </summary>
     /// <example>C:\results\myfile.avro</example>
+    [UIHint(nameof(DataSource), "", DataSource.FilePath)]
     [DisplayFormat(DataFormatString = "Text")]
     public string FilePath { get; init; }
+
+    /// <summary>
+    /// Gets or sets the Avro data as a byte array.
+    /// The data can be an Avro object container file content, or raw Avro binary data when SchemaJson is provided.
+    /// </summary>
+    /// <example>#var.avroBytes</example>
+    [UIHint(nameof(DataSource), "", DataSource.FileBytes)]
+    [DisplayFormat(DataFormatString = "Expression")]
+    public byte[] FileBytes { get; init; }
 
     /// <summary>
     /// Gets or sets the Avro schema JSON.

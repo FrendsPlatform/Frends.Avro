@@ -60,7 +60,7 @@ internal static class AvroHandler
         };
     }
 
-    internal static bool IsObjectContainer(FileStream stream)
+    internal static bool IsObjectContainer(Stream stream)
     {
         var header = new byte[DataFileConstants.Magic.Length];
         var bytesRead = stream.Read(header, 0, header.Length);

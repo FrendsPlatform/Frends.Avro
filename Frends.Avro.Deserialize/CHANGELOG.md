@@ -1,5 +1,11 @@
 ﻿# Changelog
 
+## [3.1.0] - 2026-11-02
+
+### Added
+
+- Added `Input.DataSource` parameter to choose whether Avro data is read from `FilePath` or provided directly as a byte array in the new `Input.FileBytes` parameter. Defaults to `FilePath`, so existing Processes are unaffected.
+
 ## [3.0.0] - 2026-09-28
 
 ### Added
